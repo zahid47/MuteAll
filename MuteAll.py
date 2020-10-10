@@ -16,7 +16,7 @@ client = commands.Bot(command_prefix=".")
 @client.event
 async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=discord.Game(".mute | .unmute"))
-    print("Ready!")
+    # print("Ready!")
 
 
 # removes the default ".help" command
@@ -93,6 +93,16 @@ async def unmute(ctx):
     except:
         await ctx.channel.send("Something went wrong. I'm still in testing phase. Please contact my sensei "
                                "<@!187568903084441600>")
+
+
+@client.command(aliases=[])
+async def balkan(ctx):
+    await ctx.send("balkan more like bal sal")
+
+
+@client.command(aliases=[])
+async def falkan(ctx):
+    await ctx.send("all hail falkan! long live queen alu")
 
 
 # run the bot
