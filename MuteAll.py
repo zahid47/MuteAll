@@ -3,11 +3,11 @@ from discord.ext import commands
 import os
 
 
-# with open("TOKEN.txt") as file:
-#     TOKEN = file.read()
+with open("TOKEN.txt") as file:
+    TOKEN = file.read()
 
 
-TOKEN = os.environ["TOKEN"]
+# TOKEN = os.environ["TOKEN"]
 
 client = commands.Bot(command_prefix=".")
 
@@ -66,8 +66,8 @@ async def mute(ctx):
                                        f"current voice channel `{ctx.author.voice.channel}`")
         else:
             await ctx.channel.send("You must be in a voice channel first.")
-    except:
-        await ctx.channel.send("Something went wrong. I'm still in testing phase. Please contact my sensei "
+    except Exception as e:
+        await ctx.channel.send(f"Something went wrong ({e}) I'm still in testing phase. Please contact my sensei "
                                "<@!187568903084441600>")
 
 
@@ -90,19 +90,9 @@ async def unmute(ctx):
                                        f"current voice channel `{ctx.author.voice.channel}`")
         else:
             await ctx.channel.send("You must be in a voice channel first.")
-    except:
-        await ctx.channel.send("Something went wrong. I'm still in testing phase. Please contact my sensei "
+    except Exception as e:
+        await ctx.channel.send(f"Something went wrong ({e}) I'm still in testing phase. Please contact my sensei "
                                "<@!187568903084441600>")
-
-
-@client.command(aliases=[])
-async def balkan(ctx):
-    await ctx.send("balkan more like bal sal")
-
-
-@client.command(aliases=[])
-async def falkan(ctx):
-    await ctx.send("all hail falkan! long live queen alu")
 
 
 # run the bot
