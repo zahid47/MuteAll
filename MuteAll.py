@@ -3,11 +3,11 @@ from discord.ext import commands
 import os
 
 
-with open("TOKEN.txt") as file:
-    TOKEN = file.read()
+# with open("TOKEN.txt") as file:
+#     TOKEN = file.read()
 
 
-# TOKEN = os.environ["TOKEN"]
+TOKEN = os.environ["TOKEN"]
 
 client = commands.Bot(command_prefix=".")
 
