@@ -2,7 +2,7 @@
 
 In among us, there's always this one dude who don't mute their mic and keeps talking during the game (outside of meeting times) and ruins the experience for everyone. It is frustrating and time-consuming to mute everyone one by one, so I made this bot that will server-mute everyone in a voice chat with one simple command.
 
-  - Type ```.help``` to view all the commands.
+  - Type ```.help``` or ```.h``` to view all the commands.
   - Type ```.mute``` or ```.m``` to mute everyone in your current voice channel.
     - Both you and the bot require ```Mute Members``` permission. Make sure the bot also has the permission in your current voice channel.
   - Type ```.unmute``` or ```.u``` to unmute everyone in your current voice channel.
