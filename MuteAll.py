@@ -33,6 +33,7 @@ async def help(ctx):
                                                  "require `Mute Members` permission", inline=False)
     embed.add_field(name="`.unmute` / `.u`", value="Unmutes everyone in your current voice channel, only the bot "
                                                    "requires `Mute Members` permission", inline=False)
+    embed.add_field(name="_", value="[Join support server](https://discord.com/invite/Jxv66vm)", inline=False)
 
     await ctx.send(embed=embed)
 
