@@ -10,7 +10,7 @@ In among us, there's always this one dude who don't mute their mic and keeps tal
 
 
 
-[Invite The Bot To Your Server](https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot&permissions=4201472) (Edit: The bot has already joined 100 servers and now I have to verify the bot before it can join anymore. I have already started the process, it can take around 4-5 days. Meanwhile, you can try [this bot](https://aub.mysterybots.com/), it's the closest I could find.)
+[Invite The Bot To Your Server](https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot&permissions=4201472)
 
 [Video Demo](https://www.youtube.com/watch?v=3R8nwc0-M-8)
 
