@@ -33,6 +33,7 @@ async def help(ctx):
                                                  "require `Mute Members` permission", inline=False)
     embed.add_field(name="`.unmute` / `.u`", value="Unmutes everyone in your current voice channel, only the bot "
                                                    "requires `Mute Members` permission", inline=False)
+    embed.add_field(name="`.map` / `.maps`", value="Displays the Among Us maps", inline=False)
     embed.add_field(name="_", value="[Join support server](https://discord.com/invite/Jxv66vm)", inline=False)
 
     await ctx.send(embed=embed)
@@ -95,6 +96,23 @@ async def unmute(ctx):
         await ctx.channel.send(f"Something went wrong ({e}) I'm still in testing phase. Please contact my sensei "
                                "<@!187568903084441600>")
 
+# show help text
+@client.command(aliases=["map", "Map", "Maps"])
+async def maps(ctx):
+    embed = discord.Embed()
+    embed.set_author(name="The Skeld")
+    embed.set_image(url="https://static.wikia.nocookie.net/among-us-wiki/images/4/4f/SKELD_MAP.jpg/revision/latest?cb=20200914210838")
+    await ctx.send(embed=embed)
+
+    embed = discord.Embed()
+    embed.set_author(name="MiraHQ")
+    embed.set_image(url="https://static.wikia.nocookie.net/among-us-wiki/images/0/0a/Mirahq.png/revision/latest?cb=20200907132939")
+    await ctx.send(embed=embed)
+
+    embed = discord.Embed()
+    embed.set_author(name="Polus")
+    embed.set_image(url="https://static.wikia.nocookie.net/among-us-wiki/images/4/4c/Polus.png/revision/latest?cb=20200907133344")
+    await ctx.send(embed=embed)
 
 # run the bot
 client.run(TOKEN)

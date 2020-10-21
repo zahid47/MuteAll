@@ -7,6 +7,7 @@ In among us, there's always this one dude who don't mute their mic and keeps tal
     - Both you and the bot require ```Mute Members``` permission. Make sure the bot also has the permission in your current voice channel.
   - Type ```.unmute``` or ```.u``` to unmute everyone in your current voice channel.
     - only the bot requires ```Mute Members``` permission.
+  - Type ```.map``` or ```.maps``` to have the bot display picture of the Among Us maps.
 
 
 
