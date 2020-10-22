@@ -69,7 +69,7 @@ async def mute(ctx):
             await ctx.channel.send("You must be in a voice channel first.")
     except Exception as e:
         await ctx.channel.send(f"Something went wrong ({e}) I'm still in testing phase. Please contact my sensei "
-                               "<@!187568903084441600>")
+                               "on discord `SCARECOW#0456`")
 
 
 # un-muting everyone in the current voice channel
@@ -93,7 +93,7 @@ async def unmute(ctx):
             await ctx.channel.send("You must be in a voice channel first.")
     except Exception as e:
         await ctx.channel.send(f"Something went wrong ({e}) I'm still in testing phase. Please contact my sensei "
-                               "<@!187568903084441600>")
+                               "on discord `SCARECOW#0456`")
 
 
 # run the bot
