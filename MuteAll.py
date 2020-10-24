@@ -94,9 +94,9 @@ async def xm(ctx):
                             await member.edit(mute=False)  # un-mute the bot member
                             await ctx.send(f"Un-muted {member.name}")
                     if no_of_members < 2:
-                        await ctx.channel.send(f"Un-muted {no_of_members} user in {ctx.author.voice.channel}")
+                        await ctx.channel.send(f"Muted {no_of_members} user in {ctx.author.voice.channel}")
                     else:
-                        await ctx.channel.send(f"Un-muted {no_of_members} users in {ctx.author.voice.channel}")
+                        await ctx.channel.send(f"Muted {no_of_members} users in {ctx.author.voice.channel}")
                 except discord.errors.Forbidden:
                     await ctx.channel.send(  # the bot doesn't have the permission to mute
                         f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
