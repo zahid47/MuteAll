@@ -28,10 +28,11 @@ async def help(ctx):
     embed = discord.Embed()
     embed.set_author(name="Available Commands")
     embed.add_field(name="`.ping`", value="Latency of the bot", inline=False)
-    embed.add_field(name="`.mute` / `.m`", value="Mutes everyone in your current voice channel, both you and the bot "
-                                                 "require `Mute Members` permission", inline=False)
-    embed.add_field(name="`.unmute` / `.u`", value="Un-mutes everyone in your current voice channel, only the bot "
-                                                   "requires `Mute Members` permission", inline=False)
+    embed.add_field(name="`.mute` / `.m`", value="Mutes everyone (except for bots) in your current voice channel, "
+                                                 "both you and the bot require `Mute Members` permission", inline=False)
+    embed.add_field(name="`.unmute` / `.u`", value="Un-mutes everyone (except for bots) in your current voice "
+                                                   "channel, only the bot requires `Mute Members` permission",
+                    inline=False)
     embed.add_field(name="`.xm`", value="Experimental mute (useful if you use a music bot). Mutes humans and un-mutes "
                                         "bots in your current voice channel. Both you and the bot require `Mute "
                                         "Members` permission", inline=False)
