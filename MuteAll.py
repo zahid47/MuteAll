@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import random
 import os
 
 # For local testing only
@@ -159,6 +160,24 @@ async def xu(ctx):
                     f"**and** in your current voice channel `{ctx.author.voice.channel}`")
         else:
             await ctx.send("You must join a voice channel first")
+    except Exception as e:
+        await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei`SCARECOW#0456`")
+
+
+# tanner role
+@client.command(aliases=["Tanner", "t", "T"])
+async def tanner(ctx):
+    try:
+        if ctx.author.voice:  # check if the user is in a voice channel
+            members_list = []
+            for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
+                if not member.bot:  # check if member is not a bot
+                    members_list.append(member)
+            selected_tanner = random.choice(members_list)
+            await selected_tanner.send("You are the secret Tanner! If you were already an Impostor then nothing "
+                                       "changes. But if you were a crewmate, now you are the Tanner! The only way to "
+                                       "win is by making everyone else to vote you off. Act sus!")
+            await ctx.send("Selected a Tanner and sent them a DM!")
     except Exception as e:
         await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei`SCARECOW#0456`")
 
