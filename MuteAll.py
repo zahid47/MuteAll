@@ -25,6 +25,7 @@ client.remove_command("help")
 
 # shows help text
 @client.command(aliases=["commands", "Help", "h", "H"])
+@commands.cooldown(1, 3)
 async def help(ctx):
     embed = discord.Embed()
     embed.set_author(name="Available Commands")
@@ -113,6 +114,7 @@ async def xm(ctx):
 
 # un-mutes everyone (except for bots) in the current voice channel
 @client.command(aliases=["um", "un", "un-mute", "u", "U", "Un", "Um", "Unmute"])
+@commands.cooldown(1, 3)
 async def unmute(ctx):
     try:
         if ctx.author.voice:  # check if the user is in a voice channel
@@ -134,6 +136,13 @@ async def unmute(ctx):
             await ctx.send("You must join a voice channel first")
     except Exception as e:
         await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei`SCARECOW#0456`")
+
+
+# handling the unmute cooldown error if they spam it
+@unmute.error
+async def unmute_error(ctx, error):
+    if isinstance(error, commands.CommandOnCooldown):
+        pass
 
 
 # [experimental un-mute] un-mutes everyone in the current voice channel and mutes the bots, useful for music bots!
@@ -178,6 +187,8 @@ async def tanner(ctx):
                                        "changes. But if you were a crewmate, now you are the Tanner! The only way to "
                                        "win is by making everyone else to vote you off. Act sus!")
             await ctx.send("Selected a Tanner and sent them a DM!")
+        else:
+            await ctx.send("You must join a voice channel first")
     except Exception as e:
         await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei`SCARECOW#0456`")
 
