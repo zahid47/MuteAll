@@ -142,7 +142,7 @@ async def unmute(ctx):
 @unmute.error
 async def unmute_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
-        pass
+        await ctx.send("Wait 3 seconds before using this again!")
 
 
 # [experimental un-mute] un-mutes everyone in the current voice channel and mutes the bots, useful for music bots!
@@ -200,6 +200,15 @@ async def tanner(ctx):
 async def tanner_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send("Wait 60 seconds before using this again!")
+
+
+# # test
+# @client.command()
+# async def test(ctx):
+#     for member in ctx.author.voice.channel.members:
+#         if not member.bot:
+#             await member.edit(mute=True)
+#         # await ctx.send(member.name)
 
 
 # run the bot
