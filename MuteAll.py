@@ -78,7 +78,7 @@ async def mute(ctx):
         else:
             await ctx.send("You must join a voice channel first")
     except Exception as e:
-        await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei`SCARECOW#0456`")
+        await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei `SCARECOW#0456`")
 
 
 # [experimental mute] mutes everyone in the current voice channel and mutes the bots, useful for music bots!
@@ -109,7 +109,7 @@ async def xm(ctx):
         else:
             await ctx.send("You must join a voice channel first")
     except Exception as e:
-        await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei`SCARECOW#0456`")
+        await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei `SCARECOW#0456`")
 
 
 # un-mutes everyone (except for bots) in the current voice channel
@@ -135,7 +135,7 @@ async def unmute(ctx):
         else:
             await ctx.send("You must join a voice channel first")
     except Exception as e:
-        await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei`SCARECOW#0456`")
+        await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei `SCARECOW#0456`")
 
 
 # handling the unmute cooldown error if they spam it
@@ -170,7 +170,7 @@ async def xu(ctx):
         else:
             await ctx.send("You must join a voice channel first")
     except Exception as e:
-        await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei`SCARECOW#0456`")
+        await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei `SCARECOW#0456`")
 
 
 # tanner role
@@ -192,7 +192,7 @@ async def tanner(ctx):
         else:
             await ctx.send("You must join a voice channel first")
     except Exception as e:
-        await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei`SCARECOW#0456`")
+        await ctx.channel.send(f"Something went wrong ({e}). Please contact my sensei `SCARECOW#0456`")
 
 
 # handling the tanner cooldown error if they spam it
@@ -200,15 +200,6 @@ async def tanner(ctx):
 async def tanner_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send("Wait 60 seconds before using this again!")
-
-
-# # test
-# @client.command()
-# async def test(ctx):
-#     for member in ctx.author.voice.channel.members:
-#         if not member.bot:
-#             await member.edit(mute=True)
-#         # await ctx.send(member.name)
 
 
 # run the bot
