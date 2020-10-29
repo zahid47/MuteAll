@@ -4,10 +4,10 @@ import random
 import os
 
 # For local testing only
-# with open("TOKEN.txt") as file:
-#     TOKEN = file.read()
+with open("TOKEN.txt") as file:
+    TOKEN = file.read()
 
-TOKEN = os.environ["TOKEN"]
+# TOKEN = os.environ["TOKEN"]
 
 client = commands.Bot(command_prefix=".")
 
@@ -30,6 +30,7 @@ async def help(ctx):
     embed = discord.Embed()
     embed.set_author(name="Available Commands")
     embed.add_field(name="`.ping`", value="Latency of the bot", inline=False)
+    embed.add_field(name="`.invite`", value="Get invite link of the bot", inline=False)
     embed.add_field(name="`.mute` / `.m`", value="Mutes everyone (except for bots) in your current voice channel, "
                                                  "both you and the bot require `Mute Members` permission", inline=False)
     embed.add_field(name="`.unmute` / `.u`", value="Un-mutes everyone (except for bots) in your current voice "
@@ -184,7 +185,7 @@ async def tanner(ctx):
                 if not member.bot:  # check if member is not a bot
                     members_list.append(member)
             selected_tanner = random.choice(members_list)
-            await selected_tanner.send(f"[Command by {ctx.author.name}] You are the secret Tanner! If you were "
+            await selected_tanner.send(f"[Initiated by {ctx.author.name}] You are the secret Tanner! If you were "
                                        f"already an Impostor then nothing changes. But if you were a crewmate, "
                                        f"now you are the Tanner! The only way to win is by making everyone else to "
                                        f"vote you off. Act sus!")
@@ -200,6 +201,11 @@ async def tanner(ctx):
 async def tanner_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send("Wait 60 seconds before using this again!")
+
+
+@client.command(aliases=["i", "link"])
+async def invite(ctx):
+    await ctx.send("Invite Link: <https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot&permissions=4201472>")
 
 
 # run the bot
