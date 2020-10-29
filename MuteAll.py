@@ -4,10 +4,10 @@ import random
 import os
 
 # For local testing only
-with open("TOKEN.txt") as file:
-    TOKEN = file.read()
+# with open("TOKEN.txt") as file:
+#     TOKEN = file.read()
 
-# TOKEN = os.environ["TOKEN"]
+TOKEN = os.environ["TOKEN"]
 
 client = commands.Bot(command_prefix=".")
 
