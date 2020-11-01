@@ -45,7 +45,7 @@ async def help(ctx):
                     inline=False)
     embed.add_field(name="`.tanner`",
                     value="A funny game! Randomly selects a user in a voice channel to be the secret tanner, "
-                          "You win if you find out the tanner, they win if nobody is able to find out who the tanner is",
+                          "You win if you convince everyone that you are the tanner without openly telling them!",
                     inline=False)
     embed.add_field(name="_", value="[Join support server](https://discord.com/invite/Jxv66vm)", inline=False)
 
