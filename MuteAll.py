@@ -43,6 +43,10 @@ async def help(ctx):
                     value="Experimental un-mute (useful if you use a music bot). Un-mutes humans and mutes "
                           "bots in your current voice channel. Only the bot requires `Mute Members` permission",
                     inline=False)
+    embed.add_field(name="`.tanner`",
+                    value="A funny game! Randomly selects a user in a voice channel to be the secret tanner, "
+                          "You win if you find out the tanner, they win if nobody is able to find out who the tanner is",
+                    inline=False)
     embed.add_field(name="_", value="[Join support server](https://discord.com/invite/Jxv66vm)", inline=False)
 
     await ctx.send(embed=embed)
