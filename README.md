@@ -6,8 +6,6 @@ In among us, there's always this one dude who don't mute their mic and keeps tal
   
   - Type ```.help``` to view all the commands with detailed info.
 
-[Invite This Bot](https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot&permissions=4201472)
-
-[Video Demo](https://www.youtube.com/watch?v=3R8nwc0-M-8)
+[Invite The Bot](https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot&permissions=4201472)
 
 [Join Support Server](https://discord.com/invite/Jxv66vm)
