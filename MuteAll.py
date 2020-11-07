@@ -13,7 +13,7 @@ client = commands.Bot(command_prefix=".")
 @client.event
 async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=discord.Game(".help"))
-    # print("Ready!")
+    print("Ready!")
 
 
 # removes the default ".help" command
@@ -61,6 +61,7 @@ async def ping(ctx):
 # mutes everyone in the current voice channel and mutes the bots
 @client.command(aliases=["m", "M", "Mute"])
 async def mute(ctx):
+    command_name = "mute"
     try:
         if ctx.author.voice:  # check if the user is in a voice channel
             if ctx.author.guild_permissions.mute_members:  # check if the user has mute members permission
@@ -87,7 +88,7 @@ async def mute(ctx):
             await ctx.send("You must join a voice channel first")
     except Exception as e:
         me = client.get_user(187568903084441600)
-        await me.send(e)
+        await me.send(f"{command_name}: {e}")
         await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
 
 
@@ -95,6 +96,7 @@ async def mute(ctx):
 @client.command(aliases=["um", "un", "un-mute", "u", "U", "Un", "Um", "Unmute"])
 @commands.cooldown(1, 3)
 async def unmute(ctx):
+    command_name = "unmute"
     try:
         if ctx.author.voice:  # check if the user is in a voice channel
             try:  # try to un-mute if the bot has permissions
@@ -118,7 +120,7 @@ async def unmute(ctx):
             await ctx.send("You must join a voice channel first")
     except Exception as e:
         me = client.get_user(187568903084441600)
-        await me.send(e)
+        await me.send(f"{command_name}: {e}")
         await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
 
 
@@ -145,6 +147,7 @@ async def xu(ctx):
 @client.command(aliases=["Tanner", "t", "T"])
 @commands.cooldown(1, 60)
 async def tanner(ctx):
+    command_name = "tanner"
     try:
         if ctx.author.voice:  # check if the user is in a voice channel
             members_list = []
@@ -161,7 +164,7 @@ async def tanner(ctx):
             await ctx.send("You must join a voice channel first")
     except Exception as e:
         me = client.get_user(187568903084441600)
-        await me.send(e)
+        await me.send(f"{command_name}: {e}")
         await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
 
 
@@ -182,6 +185,10 @@ async def invite(ctx):
 # @client.command(aliases=["play", "s", "p"])
 # async def start(ctx):
 #     try:
+#
+#         server_id = ctx.guild.id
+#         print(server_id)
+#
 #         await ctx.send("IMPORTANT! Make sure the bot has `Add Reactions` and `Manage Messages` permission!")
 #         embed = discord.Embed()
 #         embed.add_field(name="Started a new game! React with an emoji below.", value=":regional_indicator_m: is mute, "
@@ -211,7 +218,6 @@ async def invite(ctx):
 #         me = client.get_user(187568903084441600)
 #         await me.send(e)
 #         await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
-
 
 # run the bot
 client.run(TOKEN)
