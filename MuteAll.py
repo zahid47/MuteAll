@@ -208,7 +208,7 @@ async def start(ctx):
 
     except Exception as e:
         me = client.get_user(187568903084441600)
-        # await me.send(e)
+        await me.send(e)
         await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
 
 
