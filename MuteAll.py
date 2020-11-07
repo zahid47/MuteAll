@@ -182,6 +182,7 @@ async def invite(ctx):
 @client.command(aliases=["play", "s", "p"])
 async def start(ctx):
     try:
+        await ctx.send("IMPORTANT! Make sure the bot has `Add Reactions` and `Manage Messages` permission!")
         embed = discord.Embed()
         embed.add_field(name="Started a new game! React with an emoji below.", value=":regional_indicator_m: is mute, "
                                                                                      ":regional_indicator_u: is unmute",
@@ -196,12 +197,12 @@ async def start(ctx):
                 if reaction.emoji == "🇲":
                     await mute(ctx)
                     await reaction.remove(user)
-                    time.sleep(3)
+                    time.sleep(2)
                     await ctx.channel.purge(limit=1)
                 elif reaction.emoji == "🇺":
                     await unmute(ctx)
                     await reaction.remove(user)
-                    time.sleep(3)
+                    time.sleep(2)
                     await ctx.channel.purge(limit=1)
                 else:
                     await reaction.clear()
