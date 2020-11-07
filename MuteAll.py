@@ -39,8 +39,8 @@ async def help(ctx):
                                                    "only the bot requires `Mute Members` permission",
                     inline=False)
 
-    embed.add_field(name="`.start` / `.s`", value="[BETA] React with emojies to mute or unmute, no need to type "
-                                                  "anymore! ", inline=False)
+    # embed.add_field(name="`.start` / `.s`", value="[BETA] React with emojies to mute or unmute, no need to type "
+    #                                               "anymore! ", inline=False)
 
     embed.add_field(name="`.tanner` / `.t`", value="[BETA] Add a twist to the game! The bot randomly selects a user "
                                                    "in the voice channel to be the secret tanner. The tanner can only "
@@ -178,40 +178,39 @@ async def invite(ctx):
                    "&permissions=4205632>")
 
 
-# use reactions instead of typing
-@client.command(aliases=["play", "s", "p"])
-async def start(ctx):
-    ctx.send("It's broken! Meanwhile, use `m` and `u`")
-    # try:
-    #     await ctx.send("IMPORTANT! Make sure the bot has `Add Reactions` and `Manage Messages` permission!")
-    #     embed = discord.Embed()
-    #     embed.add_field(name="Started a new game! React with an emoji below.", value=":regional_indicator_m: is mute, "
-    #                                                                                  ":regional_indicator_u: is unmute",
-    #                     inline=False)
-    #     message = await ctx.send(embed=embed)
-    #     await message.add_reaction("🇲")
-    #     await message.add_reaction("🇺")
-    #
-    #     @client.event
-    #     async def on_reaction_add(reaction, user):
-    #         if user != client.user:
-    #             if reaction.emoji == "🇲":
-    #                 await mute(ctx)
-    #                 await reaction.remove(user)
-    #                 time.sleep(2)
-    #                 await ctx.channel.purge(limit=1)
-    #             elif reaction.emoji == "🇺":
-    #                 await unmute(ctx)
-    #                 await reaction.remove(user)
-    #                 time.sleep(2)
-    #                 await ctx.channel.purge(limit=1)
-    #             else:
-    #                 await reaction.clear()
-    #
-    # except Exception as e:
-    #     me = client.get_user(187568903084441600)
-    #     await me.send(e)
-    #     await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
+# # use reactions instead of typing
+# @client.command(aliases=["play", "s", "p"])
+# async def start(ctx):
+#     try:
+#         await ctx.send("IMPORTANT! Make sure the bot has `Add Reactions` and `Manage Messages` permission!")
+#         embed = discord.Embed()
+#         embed.add_field(name="Started a new game! React with an emoji below.", value=":regional_indicator_m: is mute, "
+#                                                                                      ":regional_indicator_u: is unmute",
+#                         inline=False)
+#         message = await ctx.send(embed=embed)
+#         await message.add_reaction("🇲")
+#         await message.add_reaction("🇺")
+#
+#         @client.event
+#         async def on_reaction_add(reaction, user):
+#             if user != client.user:
+#                 if reaction.emoji == "🇲":
+#                     await mute(ctx)
+#                     await reaction.remove(user)
+#                     time.sleep(2)
+#                     await ctx.channel.purge(limit=1)
+#                 elif reaction.emoji == "🇺":
+#                     await unmute(ctx)
+#                     await reaction.remove(user)
+#                     time.sleep(2)
+#                     await ctx.channel.purge(limit=1)
+#                 else:
+#                     await reaction.clear()
+#
+#     except Exception as e:
+#         me = client.get_user(187568903084441600)
+#         await me.send(e)
+#         await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
 
 
 # run the bot
