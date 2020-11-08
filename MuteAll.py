@@ -53,6 +53,8 @@ async def help(ctx):
     # embed.add_field(name="`.start` / `.s`", value="[BETA] React with emojies to mute or unmute, no need to type "
     #                                               "anymore! ", inline=False)
 
+    embed.add_field(name="`.end` / `.e`", value="End the game, un-mute everyone (including bots)", inline=False)
+
     embed.add_field(name="`.tanner` / `.t`", value="[BETA] Add a twist to the game! The bot randomly selects a user "
                                                    "in the voice channel to be the secret tanner. The tanner can only "
                                                    "win if people vote them off (and everyone else loses).",
@@ -134,6 +136,33 @@ async def unmute(ctx):
 async def unmute_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send("Wait 2 seconds before using this again!")
+
+
+# end the game and un-mute everyone including bots
+@client.command(aliases=["e", "E", "End"])
+async def end(ctx):
+    command_name = "unmute"
+    try:
+        if ctx.author.voice:  # check if the user is in a voice channel
+            try:  # try to un-mute if the bot has permissions
+                no_of_members = 0
+                for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
+                    await member.edit(mute=False)  # un-mute the non-bot member
+                    no_of_members += 1
+                if no_of_members < 2:
+                    await ctx.channel.send(f"Un-muted {no_of_members} user in {ctx.author.voice.channel}")
+                else:
+                    await ctx.channel.send(f"Un-muted {no_of_members} users in {ctx.author.voice.channel}")
+            except discord.errors.Forbidden:
+                await ctx.channel.send(  # the bot doesn't have the permission to mute
+                    f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
+                    f"**and** in your current voice channel `{ctx.author.voice.channel}`")
+        else:
+            await ctx.send("You must join a voice channel first")
+    except Exception as e:
+        me = client.get_user(187568903084441600)
+        await me.send(f"{command_name}: {e}")
+        await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
 
 
 # tanner role
