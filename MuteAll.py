@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 import random
-import time
 import os
 
 TOKEN = os.environ["TOKEN"]
@@ -50,8 +49,8 @@ async def help(ctx):
                                                    "only the bot requires `Mute Members` permission",
                     inline=False)
 
-    # embed.add_field(name="`.start` / `.s`", value="[BETA] React with emojies to mute or unmute, no need to type "
-    #                                               "anymore! ", inline=False)
+    embed.add_field(name="`.start` / `.s`", value="[BETA] React with emojies to mute or unmute, no need to type "
+                                                  "anymore! ", inline=False)
 
     embed.add_field(name="`.end` / `.e`", value="End the game, un-mute everyone (including bots)", inline=False)
 
@@ -72,27 +71,28 @@ async def mute(ctx):
     try:
         if ctx.author.voice:  # check if the user is in a voice channel
             if ctx.author.guild_permissions.mute_members:  # check if the user has mute members permission
-                try:  # try to mute if the bot has permissions
-                    no_of_members = 0
-                    for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
-                        if not member.bot:  # check if member is not a bot
-                            await member.edit(mute=True)  # mute the non-bot member
-                            no_of_members += 1
-                        else:
-                            await member.edit(mute=False)  # un-mute the bot member
-                            await ctx.send(f"Un-muted {member.name}")
-                    if no_of_members < 2:
-                        await ctx.channel.send(f"Muted {no_of_members} user in {ctx.author.voice.channel}")
+                no_of_members = 0
+                for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
+                    if not member.bot:  # check if member is not a bot
+                        await member.edit(mute=True)  # mute the non-bot member
+                        no_of_members += 1
                     else:
-                        await ctx.channel.send(f"Muted {no_of_members} users in {ctx.author.voice.channel}")
-                except discord.errors.Forbidden:
-                    await ctx.channel.send(  # the bot doesn't have the permission to mute
-                        f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
-                        f"**and** in your current voice channel `{ctx.author.voice.channel}`")
+                        await member.edit(mute=False)  # un-mute the bot member
+                        await ctx.send(f"Un-muted {member.name}")
+                if no_of_members < 2:
+                    await ctx.channel.send(f"Muted {no_of_members} user in {ctx.author.voice.channel}")
+                else:
+                    await ctx.channel.send(f"Muted {no_of_members} users in {ctx.author.voice.channel}")
             else:
                 await ctx.channel.send("You don't have the `Mute Members` permission")
         else:
             await ctx.send("You must join a voice channel first")
+
+    except discord.errors.Forbidden:
+        await ctx.channel.send(  # the bot doesn't have the permission to mute
+            f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
+            f"**and** in your current voice channel `{ctx.author.voice.channel}`")
+
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
@@ -101,41 +101,34 @@ async def mute(ctx):
 
 # un-mutes everyone in the current voice channel and mutes the bots
 @client.command(aliases=["um", "un", "un-mute", "u", "U", "Un", "Um", "Unmute"])
-@commands.cooldown(1, 2)
 async def unmute(ctx):
     command_name = "unmute"
     try:
         if ctx.author.voice:  # check if the user is in a voice channel
-            try:  # try to un-mute if the bot has permissions
-                no_of_members = 0
-                for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
-                    if not member.bot:  # check if member is not a bot
-                        await member.edit(mute=False)  # un-mute the non-bot member
-                        no_of_members += 1
-                    else:
-                        await member.edit(mute=True)  # mute the bot member
-                        await ctx.send(f"Muted {member.name}")
-                if no_of_members < 2:
-                    await ctx.channel.send(f"Un-muted {no_of_members} user in {ctx.author.voice.channel}")
+            no_of_members = 0
+            for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
+                if not member.bot:  # check if member is not a bot
+                    await member.edit(mute=False)  # un-mute the non-bot member
+                    no_of_members += 1
                 else:
-                    await ctx.channel.send(f"Un-muted {no_of_members} users in {ctx.author.voice.channel}")
-            except discord.errors.Forbidden:
-                await ctx.channel.send(  # the bot doesn't have the permission to mute
-                    f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
-                    f"**and** in your current voice channel `{ctx.author.voice.channel}`")
+                    await member.edit(mute=True)  # mute the bot member
+                    await ctx.send(f"Muted {member.name}")
+            if no_of_members < 2:
+                await ctx.channel.send(f"Un-muted {no_of_members} user in {ctx.author.voice.channel}")
+            else:
+                await ctx.channel.send(f"Un-muted {no_of_members} users in {ctx.author.voice.channel}")
         else:
             await ctx.send("You must join a voice channel first")
+
+    except discord.errors.Forbidden:
+        await ctx.channel.send(  # the bot doesn't have the permission to mute
+            f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
+            f"**and** in your current voice channel `{ctx.author.voice.channel}`")
+
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
         await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
-
-
-# handling the unmute cooldown error if they spam it
-@unmute.error
-async def unmute_error(ctx, error):
-    if isinstance(error, commands.CommandOnCooldown):
-        await ctx.send("Wait 2 seconds before using this again!")
 
 
 # end the game and un-mute everyone including bots
@@ -144,21 +137,22 @@ async def end(ctx):
     command_name = "unmute"
     try:
         if ctx.author.voice:  # check if the user is in a voice channel
-            try:  # try to un-mute if the bot has permissions
-                no_of_members = 0
-                for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
-                    await member.edit(mute=False)  # un-mute the non-bot member
-                    no_of_members += 1
-                if no_of_members < 2:
-                    await ctx.channel.send(f"Un-muted {no_of_members} user in {ctx.author.voice.channel}")
-                else:
-                    await ctx.channel.send(f"Un-muted {no_of_members} users in {ctx.author.voice.channel}")
-            except discord.errors.Forbidden:
-                await ctx.channel.send(  # the bot doesn't have the permission to mute
-                    f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
-                    f"**and** in your current voice channel `{ctx.author.voice.channel}`")
+            no_of_members = 0
+            for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
+                await member.edit(mute=False)  # un-mute the non-bot member
+                no_of_members += 1
+            if no_of_members < 2:
+                await ctx.channel.send(f"Un-muted {no_of_members} user in {ctx.author.voice.channel}")
+            else:
+                await ctx.channel.send(f"Un-muted {no_of_members} users in {ctx.author.voice.channel}")
         else:
             await ctx.send("You must join a voice channel first")
+
+    except discord.errors.Forbidden:
+        await ctx.channel.send(  # the bot doesn't have the permission to mute
+            f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
+            f"**and** in your current voice channel `{ctx.author.voice.channel}`")
+
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
@@ -199,6 +193,91 @@ async def xm(ctx):
 @client.command(aliases=["Xu"])
 async def xu(ctx):
     await ctx.send("`.xu` is now `.u`. So just use that instead.")
+
+
+async def mute_with_reaction(user):
+    command_name = "mute_with_reaction"
+    try:
+        if user.voice:  # check if the user is in a voice channel
+            if user.guild_permissions.mute_members:  # check if the user has mute members permission
+                for member in user.voice.channel.members:  # traverse through the members list in current vc
+                    if not member.bot:  # check if member is not a bot
+                        await member.edit(mute=True)  # mute the non-bot member
+                    else:
+                        await member.edit(mute=False)  # un-mute the bot member
+    except Exception as e:
+        me = client.get_user(187568903084441600)
+        await me.send(f"{command_name}: {e}")
+
+
+async def unmute_with_reaction(user):
+    command_name = "unmute_with_reaction"
+    try:
+        if user.voice:  # check if the user is in a voice channel
+            for member in user.voice.channel.members:  # traverse through the members list in current vc
+                if not member.bot:  # check if member is not a bot
+                    await member.edit(mute=False)  # mute the non-bot member
+                else:
+                    await member.edit(mute=True)  # un-mute the bot member
+    except Exception as e:
+        me = client.get_user(187568903084441600)
+        await me.send(f"{command_name}: {e}")
+
+
+async def end_with_reaction(user):
+    command_name = "end_with_reaction"
+    try:
+        if user.voice:  # check if the user is in a voice channel
+            for member in user.voice.channel.members:  # traverse through the members list in current vc
+                await member.edit(mute=False)  # mute the non-bot member
+    except Exception as e:
+        me = client.get_user(187568903084441600)
+        await me.send(f"{command_name}: {e}")
+
+
+# use reactions instead of typing
+@client.command(aliases=["play", "s", "p"])
+async def start(ctx):
+    try:
+        embed = discord.Embed()
+        embed.add_field(name="Started a new game! React with an emoji below.", value=":regional_indicator_m: is mute, "
+                                                                                     ":regional_indicator_u: is "
+                                                                                     "unmute, :regional_indicator_e: "
+                                                                                     "is end game", inline=False)
+        message = await ctx.send(embed=embed)
+
+        await message.add_reaction("🇲")
+        await message.add_reaction("🇺")
+        await message.add_reaction("🇪")
+
+        @client.event
+        async def on_reaction_add(reaction, user):
+            try:
+                if user != client.user:
+                    if reaction.emoji == "🇲":
+                        await mute_with_reaction(user)
+                        await reaction.remove(user)
+
+                    elif reaction.emoji == "🇺":
+                        await unmute_with_reaction(user)
+                        await reaction.remove(user)
+
+                    elif reaction.emoji == "🇪":
+                        await end_with_reaction(user)
+                        await reaction.remove(user)
+
+            except discord.errors.Forbidden:
+                await ctx.send("Make sure I have the following permissions: `Manage Messages`, `Read Message History`, "
+                               "`Add Reactions`, `Mute Members`")
+
+    except discord.errors.Forbidden:
+        await ctx.send("Make sure I have the following permissions: `Manage Messages`, `Read Message History`, "
+                       "`Add Reactions`, `Mute Members`")
+
+    except Exception as e:
+        me = client.get_user(187568903084441600)
+        await me.send(e)
+        await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
 
 
 # run the bot
