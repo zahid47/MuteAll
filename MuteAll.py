@@ -8,6 +8,9 @@ TOKEN = os.environ["TOKEN"]
 
 client = commands.Bot(command_prefix=".")
 
+# removes the default ".help" command
+client.remove_command("help")
+
 
 # sets status when the bot is ready
 @client.event
@@ -16,8 +19,16 @@ async def on_ready():
     print("Ready!")
 
 
-# removes the default ".help" command
-client.remove_command("help")
+@client.command(aliases=["i", "link"])
+async def invite(ctx):
+    await ctx.send("Invite Link: <https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot"
+                   "&permissions=4271168>")
+
+
+# shows latency of the bot
+@client.command(aliases=["latency"])
+async def ping(ctx):
+    await ctx.send(f"ping {round(client.latency * 1000)} ms")
 
 
 # shows help text
@@ -52,12 +63,6 @@ async def help(ctx):
     await ctx.send(embed=embed)
 
 
-# shows latency of the bot
-@client.command(aliases=["latency"])
-async def ping(ctx):
-    await ctx.send(f"ping {round(client.latency * 1000)} ms")
-
-
 # mutes everyone in the current voice channel and mutes the bots
 @client.command(aliases=["m", "M", "Mute"])
 async def mute(ctx):
@@ -73,7 +78,7 @@ async def mute(ctx):
                             no_of_members += 1
                         else:
                             await member.edit(mute=False)  # un-mute the bot member
-                            # await ctx.send(f"Un-muted {member.name}")
+                            await ctx.send(f"Un-muted {member.name}")
                     if no_of_members < 2:
                         await ctx.channel.send(f"Muted {no_of_members} user in {ctx.author.voice.channel}")
                     else:
@@ -94,7 +99,7 @@ async def mute(ctx):
 
 # un-mutes everyone in the current voice channel and mutes the bots
 @client.command(aliases=["um", "un", "un-mute", "u", "U", "Un", "Um", "Unmute"])
-@commands.cooldown(1, 3)
+@commands.cooldown(1, 2)
 async def unmute(ctx):
     command_name = "unmute"
     try:
@@ -107,7 +112,7 @@ async def unmute(ctx):
                         no_of_members += 1
                     else:
                         await member.edit(mute=True)  # mute the bot member
-                        # await ctx.send(f"Muted {member.name}")
+                        await ctx.send(f"Muted {member.name}")
                 if no_of_members < 2:
                     await ctx.channel.send(f"Un-muted {no_of_members} user in {ctx.author.voice.channel}")
                 else:
@@ -128,24 +133,11 @@ async def unmute(ctx):
 @unmute.error
 async def unmute_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
-        await ctx.send("Wait 3 seconds before using this again!")
-
-
-# temp
-@client.command(aliases=["Xm"])
-async def xm(ctx):
-    await ctx.send("`.xm` is now `.m`. So just use that instead.")
-
-
-# temp
-@client.command(aliases=["Xu"])
-async def xu(ctx):
-    await ctx.send("`.xu` is now `.u`. So just use that instead.")
+        await ctx.send("Wait 2 seconds before using this again!")
 
 
 # tanner role
 @client.command(aliases=["Tanner", "t", "T"])
-@commands.cooldown(1, 60)
 async def tanner(ctx):
     command_name = "tanner"
     try:
@@ -168,56 +160,17 @@ async def tanner(ctx):
         await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
 
 
-# handling the tanner cooldown error if they spam it
-@tanner.error
-async def tanner_error(ctx, error):
-    if isinstance(error, commands.CommandOnCooldown):
-        await ctx.send("Wait 60 seconds before using this again!")
+# temp
+@client.command(aliases=["Xm"])
+async def xm(ctx):
+    await ctx.send("`.xm` is now `.m`. So just use that instead.")
 
 
-@client.command(aliases=["i", "link"])
-async def invite(ctx):
-    await ctx.send("Invite Link: <https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot"
-                   "&permissions=4205632>")
+# temp
+@client.command(aliases=["Xu"])
+async def xu(ctx):
+    await ctx.send("`.xu` is now `.u`. So just use that instead.")
 
-
-# # use reactions instead of typing
-# @client.command(aliases=["play", "s", "p"])
-# async def start(ctx):
-#     try:
-#
-#         server_id = ctx.guild.id
-#         print(server_id)
-#
-#         await ctx.send("IMPORTANT! Make sure the bot has `Add Reactions` and `Manage Messages` permission!")
-#         embed = discord.Embed()
-#         embed.add_field(name="Started a new game! React with an emoji below.", value=":regional_indicator_m: is mute, "
-#                                                                                      ":regional_indicator_u: is unmute",
-#                         inline=False)
-#         message = await ctx.send(embed=embed)
-#         await message.add_reaction("🇲")
-#         await message.add_reaction("🇺")
-#
-#         @client.event
-#         async def on_reaction_add(reaction, user):
-#             if user != client.user:
-#                 if reaction.emoji == "🇲":
-#                     await mute(ctx)
-#                     await reaction.remove(user)
-#                     time.sleep(2)
-#                     await ctx.channel.purge(limit=1)
-#                 elif reaction.emoji == "🇺":
-#                     await unmute(ctx)
-#                     await reaction.remove(user)
-#                     time.sleep(2)
-#                     await ctx.channel.purge(limit=1)
-#                 else:
-#                     await reaction.clear()
-#
-#     except Exception as e:
-#         me = client.get_user(187568903084441600)
-#         await me.send(e)
-#         await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
 
 # run the bot
 client.run(TOKEN)
