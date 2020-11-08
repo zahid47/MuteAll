@@ -8,6 +8,6 @@ In among us, there's always this one dude who don't mute their mic and keeps tal
 
 
 # Links
-[Invite The Bot](https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot&permissions=4205632)
+[Invite The Bot](https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot&permissions=4271168)
 
 [Join Support Server](https://discord.com/invite/Jxv66vm)
