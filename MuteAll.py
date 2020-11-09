@@ -79,7 +79,9 @@ async def mute(ctx):
                     else:
                         await member.edit(mute=False)  # un-mute the bot member
                         await ctx.send(f"Un-muted {member.name}")
-                if no_of_members < 2:
+                if no_of_members == 0:
+                    await ctx.channel.send(f"Everyone, please disconnect and reconnect to the VC again")
+                elif no_of_members < 2:
                     await ctx.channel.send(f"Muted {no_of_members} user in {ctx.author.voice.channel}")
                 else:
                     await ctx.channel.send(f"Muted {no_of_members} users in {ctx.author.voice.channel}")
@@ -96,7 +98,9 @@ async def mute(ctx):
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
-        await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
+        await ctx.channel.send(f"Something went wrong ({e}). You should DM `SCARECOW#0456` if this keeps happening. "
+                               f"Also make sure the bot has the following permissions: `Manage Messages`, "
+                               f"`Read Message History`, `Add Reactions`, `Mute Members`")
 
 
 # un-mutes everyone in the current voice channel and mutes the bots
@@ -113,7 +117,9 @@ async def unmute(ctx):
                 else:
                     await member.edit(mute=True)  # mute the bot member
                     await ctx.send(f"Muted {member.name}")
-            if no_of_members < 2:
+            if no_of_members == 0:
+                await ctx.channel.send(f"Everyone, please disconnect and reconnect to the VC again")
+            elif no_of_members < 2:
                 await ctx.channel.send(f"Un-muted {no_of_members} user in {ctx.author.voice.channel}")
             else:
                 await ctx.channel.send(f"Un-muted {no_of_members} users in {ctx.author.voice.channel}")
@@ -128,7 +134,9 @@ async def unmute(ctx):
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
-        await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
+        await ctx.channel.send(f"Something went wrong ({e}). You should DM `SCARECOW#0456` if this keeps happening. "
+                               f"Also make sure the bot has the following permissions: `Manage Messages`, "
+                               f"`Read Message History`, `Add Reactions`, `Mute Members`")
 
 
 # end the game and un-mute everyone including bots
@@ -141,7 +149,9 @@ async def end(ctx):
             for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
                 await member.edit(mute=False)  # un-mute the non-bot member
                 no_of_members += 1
-            if no_of_members < 2:
+            if no_of_members == 0:
+                await ctx.channel.send(f"Everyone, please disconnect and reconnect to the VC again")
+            elif no_of_members < 2:
                 await ctx.channel.send(f"Un-muted {no_of_members} user in {ctx.author.voice.channel}")
             else:
                 await ctx.channel.send(f"Un-muted {no_of_members} users in {ctx.author.voice.channel}")
@@ -156,7 +166,9 @@ async def end(ctx):
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
-        await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
+        await ctx.channel.send(f"Something went wrong ({e}). You should DM `SCARECOW#0456` if this keeps happening. "
+                               f"Also make sure the bot has the following permissions: `Manage Messages`, "
+                               f"`Read Message History`, `Add Reactions`, `Mute Members`")
 
 
 # tanner role
@@ -180,7 +192,9 @@ async def tanner(ctx):
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
-        await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
+        await ctx.channel.send(f"Something went wrong ({e}). You should DM `SCARECOW#0456` if this keeps happening. "
+                               f"Also make sure the bot has the following permissions: `Manage Messages`, "
+                               f"`Read Message History`, `Add Reactions`, `Mute Members`")
 
 
 # temp
@@ -235,6 +249,7 @@ async def end_with_reaction(user):
         await me.send(f"{command_name}: {e}")
 
 
+# TODO: Move to on_raw_reaction_add, get user obj using user_id, find a way to get reaction obj
 # use reactions instead of typing
 @client.command(aliases=["play", "s", "p"])
 async def start(ctx):
@@ -253,18 +268,21 @@ async def start(ctx):
         @client.event
         async def on_reaction_add(reaction, user):
             try:
-                if user != client.user:
-                    if reaction.emoji == "🇲":
-                        await mute_with_reaction(user)
-                        await reaction.remove(user)
+                if user != client.user:  # this user is the user who reacted, ignore the initial reactions from the bot
+                    if reaction.message.author == client.user:  # this user is the author of the embed, should be the
+                        # bot itself, this check is needed so the bot doesn't mute/unmute on reactions to any other
+                        # messages
+                        if reaction.emoji == "🇲":
+                            await mute_with_reaction(user)
+                            await reaction.remove(user)
 
-                    elif reaction.emoji == "🇺":
-                        await unmute_with_reaction(user)
-                        await reaction.remove(user)
+                        elif reaction.emoji == "🇺":
+                            await unmute_with_reaction(user)
+                            await reaction.remove(user)
 
-                    elif reaction.emoji == "🇪":
-                        await end_with_reaction(user)
-                        await reaction.remove(user)
+                        elif reaction.emoji == "🇪":
+                            await end_with_reaction(user)
+                            await reaction.remove(user)
 
             except discord.errors.Forbidden:
                 await ctx.send("Make sure I have the following permissions: `Manage Messages`, `Read Message History`, "
@@ -277,7 +295,9 @@ async def start(ctx):
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(e)
-        await ctx.channel.send(f"Something went wrong ({e}). `SCARECOW#0456` was notified.")
+        await ctx.channel.send(f"Something went wrong ({e}). You should DM `SCARECOW#0456` if this keeps happening. "
+                               f"Also make sure the bot has the following permissions: `Manage Messages`, "
+                               f"`Read Message History`, `Add Reactions`, `Mute Members`")
 
 
 # run the bot
