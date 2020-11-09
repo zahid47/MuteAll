@@ -23,8 +23,7 @@ async def on_guild_join(guild):
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
             await channel.send("Hey, thanks for inviting me! I hope I can be helpful! If you are already in a voice "
-                               "channel, please rejoin so I can work properly. You can type `.help` to view all the "
-                               "commands.")
+                               "channel, please rejoin so I can work properly. Type `.help` to view all the commands.")
             break
 
 
