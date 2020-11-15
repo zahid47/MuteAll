@@ -14,7 +14,8 @@ client.remove_command("help")
 # sets status when the bot is ready
 @client.event
 async def on_ready():
-    await client.change_presence(status=discord.Status.online, activity=discord.Game(".help"))
+    activity = discord.Activity(name=".help", type=discord.ActivityType.watching)
+    await client.change_presence(status=discord.Status.online, activity=activity)
     print("Ready!")
 
 
@@ -58,12 +59,12 @@ async def help(ctx):
                                                    "only the bot requires `Mute Members` permission",
                     inline=False)
 
-    embed.add_field(name="`.start` / `.s`", value="[BETA] React with emojies to mute or unmute, no need to type "
+    embed.add_field(name="`.start` / `.s`", value="React with emojies to mute or unmute, no need to type "
                                                   "anymore! ", inline=False)
 
     embed.add_field(name="`.end` / `.e`", value="End the game, un-mute everyone (including bots)", inline=False)
 
-    embed.add_field(name="`.tanner` / `.t`", value="[BETA] Add a twist to the game! The bot randomly selects a user "
+    embed.add_field(name="`.tanner` / `.t`", value="Add a twist to the game! The bot randomly selects a user "
                                                    "in the voice channel to be the secret tanner. The tanner can only "
                                                    "win if people vote them off (and everyone else loses).",
                     inline=False)
@@ -104,12 +105,22 @@ async def mute(ctx):
             f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
             f"**and** in your current voice channel `{ctx.author.voice.channel}`")
 
+    except discord.errors.NotFound:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+    except discord.errors.HTTPException:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
-        await ctx.channel.send(f"Something went wrong ({e}). You should DM `SCARECOW#0456` if this keeps happening. "
-                               f"Also make sure the bot has the following permissions: `Manage Messages`, "
-                               f"`Read Message History`, `Add Reactions`, `Mute Members`")
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
 
 
 # un-mutes everyone in the current voice channel and mutes the bots
@@ -140,18 +151,28 @@ async def unmute(ctx):
             f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
             f"**and** in your current voice channel `{ctx.author.voice.channel}`")
 
+    except discord.errors.NotFound:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+    except discord.errors.HTTPException:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
-        await ctx.channel.send(f"Something went wrong ({e}). You should DM `SCARECOW#0456` if this keeps happening. "
-                               f"Also make sure the bot has the following permissions: `Manage Messages`, "
-                               f"`Read Message History`, `Add Reactions`, `Mute Members`")
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
 
 
 # end the game and un-mute everyone including bots
 @client.command(aliases=["e", "E", "End"])
 async def end(ctx):
-    command_name = "unmute"
+    command_name = "end"
     try:
         if ctx.author.voice:  # check if the user is in a voice channel
             no_of_members = 0
@@ -172,12 +193,22 @@ async def end(ctx):
             f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
             f"**and** in your current voice channel `{ctx.author.voice.channel}`")
 
+    except discord.errors.NotFound:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+    except discord.errors.HTTPException:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
-        await ctx.channel.send(f"Something went wrong ({e}). You should DM `SCARECOW#0456` if this keeps happening. "
-                               f"Also make sure the bot has the following permissions: `Manage Messages`, "
-                               f"`Read Message History`, `Add Reactions`, `Mute Members`")
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
 
 
 # tanner role
@@ -198,24 +229,23 @@ async def tanner(ctx):
             await ctx.send("Selected a Tanner and sent them a DM!")
         else:
             await ctx.send("You must join a voice channel first")
+
+    except discord.errors.NotFound:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+    except discord.errors.HTTPException:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
-        await ctx.channel.send(f"Something went wrong ({e}). You should DM `SCARECOW#0456` if this keeps happening. "
-                               f"Also make sure the bot has the following permissions: `Manage Messages`, "
-                               f"`Read Message History`, `Add Reactions`, `Mute Members`")
-
-
-# temp
-@client.command(aliases=["Xm"])
-async def xm(ctx):
-    await ctx.send("`.xm` is now `.m`. So just use that instead.")
-
-
-# temp
-@client.command(aliases=["Xu"])
-async def xu(ctx):
-    await ctx.send("`.xu` is now `.u`. So just use that instead.")
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
 
 
 async def mute_with_reaction(user):
@@ -247,32 +277,30 @@ async def unmute_with_reaction(user):
         await me.send(f"{command_name}: {e}")
 
 
-async def end_with_reaction(user):
-    command_name = "end_with_reaction"
-    try:
-        if user.voice:  # check if the user is in a voice channel
-            for member in user.voice.channel.members:  # traverse through the members list in current vc
-                await member.edit(mute=False)  # mute the non-bot member
-    except Exception as e:
-        me = client.get_user(187568903084441600)
-        await me.send(f"{command_name}: {e}")
+# async def end_with_reaction(user):
+#     command_name = "end_with_reaction"
+#     try:
+#         if user.voice:  # check if the user is in a voice channel
+#             for member in user.voice.channel.members:  # traverse through the members list in current vc
+#                 await member.edit(mute=False)  # mute the non-bot member
+#     except Exception as e:
+#         me = client.get_user(187568903084441600)
+#         await me.send(f"{command_name}: {e}")
 
 
-# TODO: Move to on_raw_reaction_add, get user obj using user_id, find a way to get reaction obj
+# TODO: Move to on_raw_reaction_add(), get user obj using user_id, find a way to get reaction obj
 # use reactions instead of typing
 @client.command(aliases=["play", "s", "p"])
 async def start(ctx):
     try:
         embed = discord.Embed()
-        embed.add_field(name="Started a new game! React with an emoji below.", value=":regional_indicator_m: is mute, "
-                                                                                     ":regional_indicator_u: is "
-                                                                                     "unmute, :regional_indicator_e: "
-                                                                                     "is end game", inline=False)
+        embed.add_field(name="React with an emoji below!", value=":regional_indicator_m: is mute, "
+                                                                 ":regional_indicator_u: is unmute", inline=False)
         message = await ctx.send(embed=embed)
 
         await message.add_reaction("🇲")
         await message.add_reaction("🇺")
-        await message.add_reaction("🇪")
+        # await message.add_reaction("🇪")
 
         @client.event
         async def on_reaction_add(reaction, user):
@@ -289,9 +317,9 @@ async def start(ctx):
                             await unmute_with_reaction(user)
                             await reaction.remove(user)
 
-                        elif reaction.emoji == "🇪":
-                            await end_with_reaction(user)
-                            await reaction.remove(user)
+                        # elif reaction.emoji == "🇪":
+                        #     await end_with_reaction(user)
+                        #     await reaction.remove(user)
 
             except discord.errors.Forbidden:
                 await ctx.send("Make sure I have the following permissions: `Manage Messages`, `Read Message History`, "
@@ -301,12 +329,22 @@ async def start(ctx):
         await ctx.send("Make sure I have the following permissions: `Manage Messages`, `Read Message History`, "
                        "`Add Reactions`, `Mute Members`")
 
+    except discord.errors.NotFound:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+    except discord.errors.HTTPException:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(e)
-        await ctx.channel.send(f"Something went wrong ({e}). You should DM `SCARECOW#0456` if this keeps happening. "
-                               f"Also make sure the bot has the following permissions: `Manage Messages`, "
-                               f"`Read Message History`, `Add Reactions`, `Mute Members`")
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
 
 
 # run the bot
