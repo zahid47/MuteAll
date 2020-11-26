@@ -59,6 +59,18 @@ async def help(ctx):
                                                    "only the bot requires `Mute Members` permission",
                     inline=False)
 
+    embed.add_field(name="`.deafen` / `.d`", value="Deafen everyone in your current voice channel, "
+                                                   "both you and the bot require `Mute Members` permission",
+                    inline=False)
+
+    embed.add_field(name="`.undeafen` / `.ud`", value="Un-deafen everyone in your current voice channel, "
+                                                      "only the bot requires `Mute Members` permission",
+                    inline=False)
+
+    embed.add_field(name="`.undeafenme` / `.udme`", value="Un-deafen yourself, "
+                                                          "only the bot requires `Mute Members` permission",
+                    inline=False)
+
     embed.add_field(name="`.start` / `.s`", value="React with emojies to mute or unmute, no need to type "
                                                   "anymore! ", inline=False)
 
@@ -123,6 +135,51 @@ async def mute(ctx):
                                f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
 
 
+# deafens everyone in the current voice channel
+@client.command(aliases=["d", "Deafen"])
+async def deafen(ctx):
+    command_name = "deafen"
+    try:
+        if ctx.author.voice:  # check if the user is in a voice channel
+            if ctx.author.guild_permissions.mute_members:  # check if the user has mute members permission
+                no_of_members = 0
+                for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
+                    await member.edit(deafen=True)  # deafen the member
+                    no_of_members += 1
+                if no_of_members == 0:
+                    await ctx.channel.send(f"Everyone, please disconnect and reconnect to the VC again")
+                elif no_of_members < 2:
+                    await ctx.channel.send(f"Deafened {no_of_members} user in {ctx.author.voice.channel}")
+                else:
+                    await ctx.channel.send(f"Deafened {no_of_members} users in {ctx.author.voice.channel}")
+            else:
+                await ctx.channel.send("You don't have the `Mute Members` permission")
+        else:
+            await ctx.send("You must join a voice channel first")
+
+    except discord.errors.Forbidden:
+        await ctx.channel.send(  # the bot doesn't have the permission to mute
+            f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
+            f"**and** in your current voice channel `{ctx.author.voice.channel}`")
+
+    except discord.errors.NotFound:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+    except discord.errors.HTTPException:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+    except Exception as e:
+        me = client.get_user(187568903084441600)
+        await me.send(f"{command_name}: {e}")
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+
 # un-mutes everyone in the current voice channel and mutes the bots
 @client.command(aliases=["um", "un", "un-mute", "u", "U", "Un", "Um", "Unmute"])
 async def unmute(ctx):
@@ -143,6 +200,82 @@ async def unmute(ctx):
                 await ctx.channel.send(f"Un-muted {no_of_members} user in {ctx.author.voice.channel}")
             else:
                 await ctx.channel.send(f"Un-muted {no_of_members} users in {ctx.author.voice.channel}")
+        else:
+            await ctx.send("You must join a voice channel first")
+
+    except discord.errors.Forbidden:
+        await ctx.channel.send(  # the bot doesn't have the permission to mute
+            f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
+            f"**and** in your current voice channel `{ctx.author.voice.channel}`")
+
+    except discord.errors.NotFound:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+    except discord.errors.HTTPException:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+    except Exception as e:
+        me = client.get_user(187568903084441600)
+        await me.send(f"{command_name}: {e}")
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+
+# un-deafens the user in the current voice channel
+@client.command(aliases=["udme", "Undeafenme"])
+async def undeafenme(ctx):
+    command_name = "undeafenme"
+    try:
+        if ctx.author.voice:  # check if the user is in a voice channel
+            await ctx.author.edit(deafen=False)
+            await ctx.send(f"Un-deafened {ctx.author.name}")
+        else:
+            await ctx.send("You must join a voice channel first")
+
+    except discord.errors.Forbidden:
+        await ctx.channel.send(  # the bot doesn't have the permission to mute
+            f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
+            f"**and** in your current voice channel `{ctx.author.voice.channel}`")
+
+    except discord.errors.NotFound:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+    except discord.errors.HTTPException:
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+    except Exception as e:
+        me = client.get_user(187568903084441600)
+        await me.send(f"{command_name}: {e}")
+        await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
+                               f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
+                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+
+
+# un-deafens everyone in the current voice channel
+@client.command(aliases=["ud", "Undeafen"])
+async def undeafen(ctx):
+    command_name = "undeafen"
+    try:
+        if ctx.author.voice:  # check if the user is in a voice channel
+            no_of_members = 0
+            for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
+                await member.edit(deafen=False)  # un-deafen the member
+                no_of_members += 1
+            if no_of_members == 0:
+                await ctx.channel.send(f"Everyone, please disconnect and reconnect to the VC again")
+            elif no_of_members < 2:
+                await ctx.channel.send(f"Un-deafened {no_of_members} user in {ctx.author.voice.channel}")
+            else:
+                await ctx.channel.send(f"Un-deafened {no_of_members} users in {ctx.author.voice.channel}")
         else:
             await ctx.send("You must join a voice channel first")
 
@@ -300,6 +433,7 @@ async def start(ctx):
 
         await message.add_reaction("🇲")
         await message.add_reaction("🇺")
+
         # await message.add_reaction("🇪")
 
         @client.event
