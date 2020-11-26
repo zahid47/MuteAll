@@ -141,7 +141,7 @@ async def deafen(ctx):
     command_name = "deafen"
     try:
         if ctx.author.voice:  # check if the user is in a voice channel
-            if ctx.author.guild_permissions.mute_members:  # check if the user has mute members permission
+            if ctx.author.guild_permissions.deafen_members:  # check if the user has mute members permission
                 no_of_members = 0
                 for member in ctx.author.voice.channel.members:  # traverse through the members list in current vc
                     await member.edit(deafen=True)  # deafen the member
@@ -153,13 +153,13 @@ async def deafen(ctx):
                 else:
                     await ctx.channel.send(f"Deafened {no_of_members} users in {ctx.author.voice.channel}")
             else:
-                await ctx.channel.send("You don't have the `Mute Members` permission")
+                await ctx.channel.send("You don't have the `Deafen Members` permission")
         else:
             await ctx.send("You must join a voice channel first")
 
     except discord.errors.Forbidden:
         await ctx.channel.send(  # the bot doesn't have the permission to mute
-            f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
+            f"I don't have the `Deafen Members` permission. Make sure I have the permission in my role "
             f"**and** in your current voice channel `{ctx.author.voice.channel}`")
 
     except discord.errors.NotFound:
@@ -239,7 +239,7 @@ async def undeafenme(ctx):
 
     except discord.errors.Forbidden:
         await ctx.channel.send(  # the bot doesn't have the permission to mute
-            f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
+            f"I don't have the `Deafen Members` permission. Make sure I have the permission in my role "
             f"**and** in your current voice channel `{ctx.author.voice.channel}`")
 
     except discord.errors.NotFound:
@@ -281,7 +281,7 @@ async def undeafen(ctx):
 
     except discord.errors.Forbidden:
         await ctx.channel.send(  # the bot doesn't have the permission to mute
-            f"I don't have the `Mute Members` permission. Make sure I have the permission in my role "
+            f"I don't have the `Deafen Members` permission. Make sure I have the permission in my role "
             f"**and** in your current voice channel `{ctx.author.voice.channel}`")
 
     except discord.errors.NotFound:
