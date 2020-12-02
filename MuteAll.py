@@ -31,7 +31,7 @@ async def on_guild_join(guild):
 @client.command(aliases=["i", "link"])
 async def invite(ctx):
     await ctx.send("Invite Link: <https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot"
-                   "&permissions=4271168>")
+                   "&permissions=12659776>")
 
 
 # shows latency of the bot
