@@ -3,9 +3,10 @@ from discord.ext import commands
 import random
 import os
 
-TOKEN = os.environ["TOKEN"]
+# TOKEN = os.environ["TOKEN"]
+TOKEN = "NzU3MzY5NDk1OTUzMzQyNTkz.X2fZTw.WOpNhal0hXh3zgCdaDCtYJysie4"
 
-client = commands.Bot(command_prefix=".")
+client = commands.AutoShardedBot(command_prefix=".")
 
 # removes the default ".help" command
 client.remove_command("help")
