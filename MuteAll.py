@@ -3,8 +3,7 @@ from discord.ext import commands
 import random
 import os
 
-# TOKEN = os.environ["TOKEN"]
-TOKEN = "NzU3MzY5NDk1OTUzMzQyNTkz.X2fZTw.WOpNhal0hXh3zgCdaDCtYJysie4"
+TOKEN = os.environ["TOKEN"]
 
 client = commands.AutoShardedBot(command_prefix=".")
 
