@@ -23,8 +23,9 @@ async def on_ready():
 async def on_guild_join(guild):
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
-            await channel.send("Hey, thanks for inviting me! I hope I can be helpful! If you are already in a voice "
-                               "channel, please rejoin so I can work properly. Type `.help` to view all the commands.")
+            await channel.send("Hey, thanks for inviting me! If you are already in a voice channel, please make "
+                               "everyone disconnect and reconnect so I can work properly. Type `.help` to view all "
+                               "the commands.")
             break
 
 
@@ -51,27 +52,22 @@ async def help(ctx):
 
     embed.add_field(name="`.invite`", value="Invite link", inline=False)
 
-    embed.add_field(name="`.mute` / `.m`", value="Mute humans and un-mute bots in your current voice channel, "
-                                                 "both you and the bot require `Mute Members` permission",
+    embed.add_field(name="`.mute` / `.m`", value="Mute humans and un-mute bots in your current voice channel.",
                     inline=False)
 
-    embed.add_field(name="`.unmute` / `.u`", value="Un-mute humans and mute bots in your current voice channel, "
-                                                   "only the bot requires `Mute Members` permission",
+    embed.add_field(name="`.unmute` / `.u`", value="Un-mute humans and mute bots in your current voice channel.",
                     inline=False)
 
-    embed.add_field(name="`.deafen` / `.d`", value="Deafen everyone in your current voice channel, "
-                                                   "both you and the bot require `Mute Members` permission",
+    embed.add_field(name="`.deafen` / `.d`", value="Deafen everyone in your current voice channel.",
                     inline=False)
 
-    embed.add_field(name="`.undeafen` / `.ud`", value="Un-deafen everyone in your current voice channel, "
-                                                      "only the bot requires `Mute Members` permission",
+    embed.add_field(name="`.undeafen` / `.ud`", value="Un-deafen everyone in your current voice channel.",
                     inline=False)
 
-    embed.add_field(name="`.undeafenme` / `.udme`", value="Un-deafen yourself, "
-                                                          "only the bot requires `Mute Members` permission",
+    embed.add_field(name="`.undeafenme` / `.udme`", value="Un-deafen only yourself.",
                     inline=False)
 
-    embed.add_field(name="`.start` / `.s`", value="React with emojies to mute or unmute, no need to type "
+    embed.add_field(name="`.start` / `.s`", value="[BETA] React with emojies to mute or unmute, no need to type "
                                                   "anymore! ", inline=False)
 
     embed.add_field(name="`.end` / `.e`", value="End the game, un-mute everyone (including bots)", inline=False)
@@ -81,7 +77,10 @@ async def help(ctx):
                                                    "win if people vote them off (and everyone else loses).",
                     inline=False)
 
-    embed.add_field(name="_", value="[Join support server](https://discord.com/invite/Jxv66vm)", inline=False)
+    embed.add_field(name="Bot not muting everyone?", value="Make everyone disconnect and reconnect to the Voice "
+                                                           "Channel again.", inline=False)
+
+    embed.add_field(name="_", value="[Join support server](https://discord.gg/8hrhffR6aX)", inline=False)
 
     await ctx.send(embed=embed)
 
@@ -120,19 +119,22 @@ async def mute(ctx):
     except discord.errors.NotFound:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.") 
 
     except discord.errors.HTTPException:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
 
 # deafens everyone in the current voice channel
@@ -165,19 +167,22 @@ async def deafen(ctx):
     except discord.errors.NotFound:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except discord.errors.HTTPException:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
 
 # un-mutes everyone in the current voice channel and mutes the bots
@@ -211,19 +216,22 @@ async def unmute(ctx):
     except discord.errors.NotFound:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except discord.errors.HTTPException:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
 
 # un-deafens the user in the current voice channel
@@ -245,19 +253,22 @@ async def undeafenme(ctx):
     except discord.errors.NotFound:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except discord.errors.HTTPException:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
 
 # un-deafens everyone in the current voice channel
@@ -287,19 +298,22 @@ async def undeafen(ctx):
     except discord.errors.NotFound:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except discord.errors.HTTPException:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
 
 # end the game and un-mute everyone including bots
@@ -329,19 +343,22 @@ async def end(ctx):
     except discord.errors.NotFound:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except discord.errors.HTTPException:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
 
 # tanner role
@@ -366,19 +383,22 @@ async def tanner(ctx):
     except discord.errors.NotFound:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except discord.errors.HTTPException:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(f"{command_name}: {e}")
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening.")
 
 
 async def mute_with_reaction(user):
@@ -466,20 +486,22 @@ async def start(ctx):
     except discord.errors.NotFound:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening. OR use the normal `.mute` and `.unmute`")
 
     except discord.errors.HTTPException:
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening. OR use the normal `.mute` and `.unmute`")
 
     except Exception as e:
         me = client.get_user(187568903084441600)
         await me.send(e)
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
-                               f"`Mute Members`. Please contact `SCARECOW#0456` if this keeps happening.")
-
+                               f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
+                               f"happening. OR use the normal `.mute` and `.unmute`")
 
 # run the bot
 client.run(TOKEN)
