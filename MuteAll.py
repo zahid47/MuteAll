@@ -23,7 +23,7 @@ async def on_ready():
 async def on_guild_join(guild):
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
-            await channel.send("Hey, thanks for inviting me! If you are already in a voice channel, please make "
+            await channel.send("Hey, thanks for adding me! If you are already in a voice channel, please make "
                                "everyone disconnect and reconnect so I can work properly. Type `.help` to view all "
                                "the commands.")
             break
@@ -38,13 +38,14 @@ async def invite(ctx):
 # shows latency of the bot
 @client.command(aliases=["latency"])
 async def ping(ctx):
-    await ctx.send(f"ping {round(client.latency * 1000)} ms")
+    await ctx.send(f"{round(client.latency * 1000)} ms")
 
 
 # shows help text
 @client.command(aliases=["commands", "Help", "h", "H"])
 async def help(ctx):
-    embed = discord.Embed()
+    embed = discord.Embed(color=discord.Color.lighter_grey())
+
     embed.set_author(name="Available Commands")
 
     embed.add_field(name="`.ping`", value="Latency of the bot", inline=False)
@@ -71,11 +72,16 @@ async def help(ctx):
 
     embed.add_field(name="`.end` / `.e`", value="End the game, un-mute everyone (including bots)", inline=False)
 
-    embed.add_field(name="`.tanner` / `.t`", value="Add a twist to the game! The bot randomly selects a user "
+    embed.add_field(name="`.tanner` / `.t`", value="Add a new role to the game! The bot randomly selects a user "
                                                    "in the voice channel to be the secret tanner. The tanner can only "
                                                    "win if people vote them off (and everyone else loses).",
                     inline=False)
-
+    embed.add_field(name="`.minion` / `.min`", value="Add a new role to the game! The bot randomly selects a user "
+                                                     "in the voice channel to be the secret minion. The minion is like "
+                                                     "another impostor but can not kill or sabotage, they will try to "
+                                                     "keep the sus away from the impostors and they will if the "
+                                                     "impostors win.",
+                    inline=False)
     embed.add_field(name="Bot not muting everyone?", value="Make everyone disconnect and reconnect to the Voice "
                                                            "Channel again.", inline=False)
 
@@ -84,10 +90,17 @@ async def help(ctx):
     await ctx.send(embed=embed)
 
 
+@client.command()
+async def test(ctx):
+    await ctx.send("Something went wrong. (HTTPException) You can try the following things:\n"
+                   "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
+                   "2. Give me the 'Administrator' permission.\n"
+                   "3. DM `SCARECOW#0456` on discord. or Join support server (https://discord.gg/8hrhffR6aX)\n")
+
+
 # mutes everyone in the current voice channel and un-mutes the bots
 @client.command(aliases=["m", "M", "Mute"])
 async def mute(ctx):
-
     command_name = "mute"
     author = ctx.author
 
@@ -115,15 +128,15 @@ async def mute(ctx):
                         f"Please make sure I have the `Mute Members` permission in my role **and** in your current "
                         f"voice channel `{author.voice.channel}`.")
                 except discord.HTTPException as e:
-                    me = client.get_user(187568903084441600)
-                    await me.send(f"{command_name} caused HTTPException: {e}")
-                    await ctx.channel.send("Something went wrong. You can try the following things:\n"
+                    # # me = client.get_user(187568903084441600)
+                    # await me.send(f"{command_name} caused HTTPException: {e}")
+                    await ctx.channel.send("Something went wrong. (HTTPException) You can try the following things:\n"
                                            "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                            "2. Give me the 'Administrator' permission.\n"
                                            "3. DM `SCARECOW#0456` on discord.\n")
                 except Exception as e:
-                    me = client.get_user(187568903084441600)
-                    await me.send(f"{command_name} caused other: {e}")
+                    # me = client.get_user(187568903084441600)
+                    # await me.send(f"{command_name} caused other: {e}")
                     await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                            "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                            "2. Give me the 'Administrator' permission.\n"
@@ -139,7 +152,6 @@ async def mute(ctx):
 # deafens everyone in the current voice channel
 @client.command(aliases=["d", "Deafen"])
 async def deafen(ctx):
-
     command_name = "deafen"
     author = ctx.author
 
@@ -163,15 +175,15 @@ async def deafen(ctx):
                         f"Please make sure I have the `Deafen Members` permission in my role **and** in your current "
                         f"voice channel `{author.voice.channel}`.")
                 except discord.HTTPException as e:
-                    me = client.get_user(187568903084441600)
-                    await me.send(f"{command_name} caused HTTPException: {e}")
+                    # me = client.get_user(187568903084441600)
+                    # await me.send(f"{command_name} caused HTTPException: {e}")
                     await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                            "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                            "2. Give me the 'Administrator' permission.\n"
                                            "3. DM `SCARECOW#0456` on discord.\n")
                 except Exception as e:
-                    me = client.get_user(187568903084441600)
-                    await me.send(f"{command_name} caused other: {e}")
+                    # me = client.get_user(187568903084441600)
+                    # await me.send(f"{command_name} caused other: {e}")
                     await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                            "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                            "2. Give me the 'Administrator' permission.\n"
@@ -187,7 +199,6 @@ async def deafen(ctx):
 # un-mutes everyone in the current voice channel and mutes the bots
 @client.command(aliases=["um", "un", "un-mute", "u", "U", "Un", "Um", "Unmute"])
 async def unmute(ctx):
-
     command_name = "unmute"
     author = ctx.author
 
@@ -214,15 +225,15 @@ async def unmute(ctx):
                     f"Please make sure I have the `Mute Members` permission in my role **and** in your current "
                     f"voice channel `{author.voice.channel}`.")
             except discord.HTTPException as e:
-                me = client.get_user(187568903084441600)
-                await me.send(f"{command_name} caused HTTPException: {e}")
+                # me = client.get_user(187568903084441600)
+                # await me.send(f"{command_name} caused HTTPException: {e}")
                 await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                        "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                        "2. Give me the 'Administrator' permission.\n"
                                        "3. DM `SCARECOW#0456` on discord.\n")
             except Exception as e:
-                me = client.get_user(187568903084441600)
-                await me.send(f"{command_name} caused other: {e}")
+                # me = client.get_user(187568903084441600)
+                # await me.send(f"{command_name} caused other: {e}")
                 await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                        "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                        "2. Give me the 'Administrator' permission.\n"
@@ -236,7 +247,6 @@ async def unmute(ctx):
 # un-deafens the user in the current voice channel
 @client.command(aliases=["udme", "Undeafenme"])
 async def undeafenme(ctx):
-
     command_name = "undeafenme"
     author = ctx.author
 
@@ -250,15 +260,15 @@ async def undeafenme(ctx):
                 f"Please make sure I have the `Deafen Members` permission in my role **and** in your current "
                 f"voice channel `{author.voice.channel}`.")
         except discord.HTTPException as e:
-            me = client.get_user(187568903084441600)
-            await me.send(f"{command_name} caused HTTPException: {e}")
+            # me = client.get_user(187568903084441600)
+            # await me.send(f"{command_name} caused HTTPException: {e}")
             await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                    "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                    "2. Give me the 'Administrator' permission.\n"
                                    "3. DM `SCARECOW#0456` on discord.\n")
         except Exception as e:
-            me = client.get_user(187568903084441600)
-            await me.send(f"{command_name} caused other: {e}")
+            # me = client.get_user(187568903084441600)
+            # await me.send(f"{command_name} caused other: {e}")
             await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                    "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                    "2. Give me the 'Administrator' permission.\n"
@@ -270,7 +280,6 @@ async def undeafenme(ctx):
 # un-deafens everyone in the current voice channel
 @client.command(aliases=["ud", "Undeafen"])
 async def undeafen(ctx):
-
     command_name = "undeafen"
     author = ctx.author
 
@@ -294,15 +303,15 @@ async def undeafen(ctx):
                         f"Please make sure I have the `Deafen Members` permission in my role **and** in your current "
                         f"voice channel `{author.voice.channel}`.")
                 except discord.HTTPException as e:
-                    me = client.get_user(187568903084441600)
-                    await me.send(f"{command_name} caused HTTPException: {e}")
+                    # me = client.get_user(187568903084441600)
+                    # await me.send(f"{command_name} caused HTTPException: {e}")
                     await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                            "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                            "2. Give me the 'Administrator' permission.\n"
                                            "3. DM `SCARECOW#0456` on discord.\n")
                 except Exception as e:
-                    me = client.get_user(187568903084441600)
-                    await me.send(f"{command_name} caused other: {e}")
+                    # me = client.get_user(187568903084441600)
+                    # await me.send(f"{command_name} caused other: {e}")
                     await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                            "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                            "2. Give me the 'Administrator' permission.\n"
@@ -318,7 +327,6 @@ async def undeafen(ctx):
 # end the game and un-mute everyone including bots
 @client.command(aliases=["e", "E", "End"])
 async def end(ctx):
-
     command_name = "end"
     author = ctx.author
 
@@ -341,15 +349,15 @@ async def end(ctx):
                     f"Please make sure I have the `Mute Members` permission in my role **and** in your current "
                     f"voice channel `{author.voice.channel}`.")
             except discord.HTTPException as e:
-                me = client.get_user(187568903084441600)
-                await me.send(f"{command_name} caused HTTPException: {e}")
+                # me = client.get_user(187568903084441600)
+                # await me.send(f"{command_name} caused HTTPException: {e}")
                 await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                        "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                        "2. Give me the 'Administrator' permission.\n"
                                        "3. DM `SCARECOW#0456` on discord.\n")
             except Exception as e:
-                me = client.get_user(187568903084441600)
-                await me.send(f"{command_name} caused other: {e}")
+                # me = client.get_user(187568903084441600)
+                # await me.send(f"{command_name} caused other: {e}")
                 await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                        "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                        "2. Give me the 'Administrator' permission.\n"
@@ -363,9 +371,11 @@ async def end(ctx):
 # tanner role
 @client.command(aliases=["Tanner", "t", "T"])
 async def tanner(ctx):
-
     command_name = "tanner"
     author = ctx.author
+
+    DMEmbed = discord.Embed(color=discord.Color.gold())
+    ReplayEmbed = discord.Embed(color=discord.Color.gold())
 
     if author.voice:  # check if the user is in a voice channel
         try:
@@ -374,22 +384,86 @@ async def tanner(ctx):
                 if not member.bot:  # check if member is not a bot
                     members_list.append(member)
             selected_tanner = random.choice(members_list)
-            await selected_tanner.send(f"[Initiated by {author.name}] You are the secret Tanner! If you were "
-                                       f"already an Impostor then nothing changes. But if you were a crewmate, "
-                                       f"now you are the Tanner! The only way to win is by making everyone else to "
-                                       f"vote you off. Act sus!")
-            await ctx.send("Selected a Tanner and sent them a DM!")
+
+            DMEmbed.set_author(name="You are the secret Tanner!")
+            DMEmbed.add_field(name="1.", value="If you were already an Impostor then nothing changes. But if you were "
+                                               "a crewmate, now you are the Tanner!", inline=False)
+            DMEmbed.add_field(name="2.", value="The only way to win is by making everyone else to vote you off. Act "
+                                               "sus!", inline=False)
+
+            await selected_tanner.send(embed=DMEmbed)
+
+            ReplayEmbed.add_field(name="Selected a TANNER and sent them a DM.", value=f"Hey crewmates, there is a "
+                                                                                      f"tanner among us! Find out who "
+                                                                                      f"it is and vote 'em off! "
+                                                                                      f" (Initiated by {author.name})",
+                                  inline=False)
+            await ctx.send(embed=ReplayEmbed)
+
         except IndexError:
-            await ctx.channel.send(f"Everyone, please disconnect and reconnect to the Voice Channel again.")
+            ReplayEmbed.add_field(name="Error", value="Everyone, please disconnect and reconnect to the Voice Channel "
+                                                      "again.")
+            await ctx.send(embed=ReplayEmbed)
         except Exception as e:
-            me = client.get_user(187568903084441600)
-            await me.send(f"{command_name}: {e}")
+            # me = client.get_user(187568903084441600)
+            # await me.send(f"{command_name}: {e}")
             await ctx.channel.send("Something went wrong. You can try the following things:\n"
                                    "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
                                    "2. Give me the 'Administrator' permission.\n"
                                    "3. DM `SCARECOW#0456` on discord.\n")
     else:
-        await ctx.send("You must join a voice channel first")
+        ReplayEmbed.add_field(name="Error", value="You must join a voice channel first")
+        await ctx.send(embed=ReplayEmbed)
+
+
+# minion role
+@client.command(aliases=["Minion", "Min", "min"])
+async def minion(ctx):
+    command_name = "minion"
+    author = ctx.author
+
+    DMEmbed = discord.Embed(color=discord.Color.orange())
+    ReplayEmbed = discord.Embed(color=discord.Color.orange())
+
+    if author.voice:  # check if the user is in a voice channel
+        try:
+            members_list = []
+            for member in author.voice.channel.members:  # traverse through the members list in current vc
+                if not member.bot:  # check if member is not a bot
+                    members_list.append(member)
+            selected_tanner = random.choice(members_list)
+
+            DMEmbed.set_author(name="You are the secret Minion!")
+            DMEmbed.add_field(name="1.", value="If you were already an Impostor then nothing changes. But if you were "
+                                               "a crewmate, now you are the Minion of the Impostor!", inline=False)
+            DMEmbed.add_field(name="2.", value="You are like the impostor but cannot kill or sabotage. You will win "
+                                               "if the impostors win. Try to keep them alive!", inline=False)
+            DMEmbed.add_field(name="3.", value="You and the impostor don't know each others identity.", inline=False)
+
+            await selected_tanner.send(embed=DMEmbed)
+
+            ReplayEmbed.add_field(name="Selected a MINION and sent them a DM.", value=f"Hey impostors, there is a "
+                                                                                      f"minion among us! Try not to "
+                                                                                      f"kill them, they will help you "
+                                                                                      f"win!"
+                                                                                      f" (Initiated by {author.name})",
+                                  inline=False)
+            await ctx.send(embed=ReplayEmbed)
+
+        except IndexError:
+            ReplayEmbed.add_field(name="Error", value="Everyone, please disconnect and reconnect to the Voice Channel "
+                                                      "again.")
+            await ctx.send(embed=ReplayEmbed)
+        except Exception as e:
+            # me = client.get_user(187568903084441600)
+            # await me.send(f"{command_name}: {e}")
+            await ctx.channel.send("Something went wrong. You can try the following things:\n"
+                                   "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
+                                   "2. Give me the 'Administrator' permission.\n"
+                                   "3. DM `SCARECOW#0456` on discord.\n")
+    else:
+        ReplayEmbed.add_field(name="Error", value="You must join a voice channel first")
+        await ctx.send(embed=ReplayEmbed)
 
 
 async def mute_with_reaction(user):
@@ -403,8 +477,9 @@ async def mute_with_reaction(user):
                     else:
                         await member.edit(mute=False)  # un-mute the bot member
     except Exception as e:
-        me = client.get_user(187568903084441600)
-        await me.send(f"{command_name}: {e}")
+        pass
+        # me = client.get_user(187568903084441600)
+        # await me.send(f"{command_name}: {e}")
 
 
 async def unmute_with_reaction(user):
@@ -417,8 +492,9 @@ async def unmute_with_reaction(user):
                 else:
                     await member.edit(mute=True)  # un-mute the bot member
     except Exception as e:
-        me = client.get_user(187568903084441600)
-        await me.send(f"{command_name}: {e}")
+        pass
+        # me = client.get_user(187568903084441600)
+        # await me.send(f"{command_name}: {e}")
 
 
 # async def end_with_reaction(user):
@@ -428,8 +504,8 @@ async def unmute_with_reaction(user):
 #             for member in user.voice.channel.members:  # traverse through the members list in current vc
 #                 await member.edit(mute=False)  # mute the non-bot member
 #     except Exception as e:
-#         me = client.get_user(187568903084441600)
-#         await me.send(f"{command_name}: {e}")
+#         # me = client.get_user(187568903084441600)
+#         # await me.send(f"{command_name}: {e}")
 
 
 # TODO: Move to on_raw_reaction_add(), get user obj using user_id, find a way to get reaction obj
@@ -487,12 +563,13 @@ async def start(ctx):
                                f"happening. OR use the normal `.mute` and `.unmute`")
 
     except Exception as e:
-        me = client.get_user(187568903084441600)
-        await me.send(e)
+        # me = client.get_user(187568903084441600)
+        # await me.send(e)
         await ctx.channel.send(f"Something went wrong. Try rejoining the VC. Also make sure the bot has the following "
                                f"permissions: `Manage Messages`, `Read Message History`, `Add Reactions`, "
                                f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
                                f"happening. OR use the normal `.mute` and `.unmute`")
+
 
 # run the bot
 client.run(TOKEN)
