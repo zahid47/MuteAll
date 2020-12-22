@@ -14,7 +14,7 @@ client.remove_command("help")
 # sets status when the bot is ready
 @client.event
 async def on_ready():
-    activity = discord.Activity(name="Try the new role MINION! Type .help for more info.", type=discord.ActivityType.playing)
+    activity = discord.Activity(name="with the new minion role! Type .help for more info.", type=discord.ActivityType.playing)
     await client.change_presence(status=discord.Status.online, activity=activity)
     print("Ready!")
 
