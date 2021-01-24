@@ -2,43 +2,53 @@ import discord
 from discord.ext import commands
 import random
 import os
+import asyncio
 
-TOKEN = os.environ["TOKEN"]
+# TOKEN = os.environ["TOKEN"]
+TOKEN = "NzY5NTM1MzIzOTkzNTM4NjEw.X5Qbng.ZsoI1ZOFBJugswDZFE5CMyrdPm4"
 
-client = commands.AutoShardedBot(command_prefix=".")
+client = commands.AutoShardedBot(command_prefix="?")
 
-# removes the default ".help" command
-client.remove_command("help")
+client.remove_command("help")  # removes the default ".help" command
 
 
 # sets status when the bot is ready
 @client.event
 async def on_ready():
-    activity = discord.Activity(name=".help", type=discord.ActivityType.watching)
+    activity = discord.Activity(name=".help", type=discord.ActivityType.playing)
     await client.change_presence(status=discord.Status.online, activity=activity)
     print("Ready!")
 
 
+# send a help msg when the bot joins a server
 @client.event
 async def on_guild_join(guild):
+    embed = discord.Embed()
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
-            await channel.send("Hey, thanks for adding me! If you are already in a voice channel, please make "
-                               "everyone disconnect and reconnect so I can work properly. Type `.help` to view all "
-                               "the commands.")
+            embed.add_field(name="Hey, thanks for adding me!", value="If you are already in a voice channel, please make "
+                                 "everyone disconnect and reconnect so I can work properly. Type `.help` to view all "
+                                 "the commands.")
+            await channel.send(embed=embed)
             break
 
 
+# invite link for the bot
 @client.command(aliases=["i", "link"])
 async def invite(ctx):
-    await ctx.send("Invite Link: <https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot"
-                   "&permissions=12659776>")
+    embed = discord.Embed()
+    embed.add_field(name="Invite Link", value="[Invite The Bot](https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot&permissions=12659776)")
+
+    await ctx.send(embed=embed)
 
 
 # shows latency of the bot
 @client.command(aliases=["latency"])
 async def ping(ctx):
-    await ctx.send(f"{round(client.latency * 1000)} ms")
+    embed = discord.Embed()
+    embed.add_field(name="Ping", value=f"{round(client.latency * 1000)} ms")
+
+    await ctx.send(embed=embed)
 
 
 # shows help text
@@ -90,19 +100,13 @@ async def help(ctx):
     await ctx.send(embed=embed)
 
 
-@client.command()
-async def test(ctx):
-    await ctx.send("Something went wrong. (HTTPException) You can try the following things:\n"
-                   "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
-                   "2. Give me the 'Administrator' permission.\n"
-                   "3. DM `SCARECOW#0456` on discord. or Join support server (https://discord.gg/8hrhffR6aX)\n")
-
-
 # mutes everyone in the current voice channel and un-mutes the bots
 @client.command(aliases=["m", "M", "Mute"])
 async def mute(ctx):
-    command_name = "mute"
-    author = ctx.author
+    # command_name = "mute"
+    author = ctx.author  # command author
+    embed = discord.Embed(color=discord.Color.red())
+    botEmbed = discord.Embed(color=discord.Color.green())
 
     if ctx.guild:  # check if the msg was in a server's text channel
         if author.voice:  # check if the user is in a voice channel
@@ -115,38 +119,58 @@ async def mute(ctx):
                             no_of_members += 1
                         else:
                             await member.edit(mute=False)  # un-mute the bot member
-                            await ctx.send(f"Un-muted {member.name}")
+                            embed.clear_fields()
+                            botEmbed.set_author(name=f"Un-muted {member.name}")
+                            await ctx.send(embed=botEmbed)
+                            # embed.add_field(name="Status", value=f"Un-muted {member.name}")
                     if no_of_members == 0:
-                        await ctx.channel.send(f"Everyone, please disconnect and reconnect to the Voice Channel again.")
-                    elif no_of_members < 2:
-                        await ctx.channel.send(f"Muted {no_of_members} user in {author.voice.channel}.")
+                        embed.clear_fields()
+                        embed.set_author(name="Everyone, please reconnect to the voice channel.")
+                        # embed.add_field(name="Error", value="Everyone, please reconnect to the voice channel.")
                     else:
-                        await ctx.channel.send(f"Muted {no_of_members} users in {author.voice.channel}.")
+                        embed.clear_fields()
+                        embed.set_author(name=f"Muted {no_of_members} user(s)")
+                        # embed.add_field(name="Status", value=f"Muted {no_of_members} users.")
+                    await ctx.send(embed=embed)
 
-                except discord.Forbidden:
-                    await ctx.channel.send(  # the bot doesn't have the permission to mute
-                        f"Please make sure I have the `Mute Members` permission in my role **and** in your current "
-                        f"voice channel `{author.voice.channel}`.")
-                except discord.HTTPException as e:
-                    # # me = client.get_user(187568903084441600)
-                    # await me.send(f"{command_name} caused HTTPException: {e}")
-                    await ctx.channel.send("Something went wrong. (HTTPException) You can try the following things:\n"
-                                           "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
-                                           "2. Give me the 'Administrator' permission.\n"
-                                           "3. DM `SCARECOW#0456` on discord.\n")
+                except discord.Forbidden: # the bot doesn't have the permission to mute
+                    embed.clear_fields()
+                    embed.add_field(name="No Permission", value=f"""
+                    Please make sure I have the `Mute Members` permission in my role **and** in your current voice channel `{author.voice.channel}`.
+                    If it is still not working, try giving me the 'administrator' permission.
+                    """)
+                    await ctx.send(embed=embed)
+                # except discord.HTTPException as e:
+                #     # # me = client.get_user(187568903084441600)
+                #     # await me.send(f"{command_name} caused HTTPException: {e}")
+                #     embed.add_field(name="Something went wrong. You can try the following things:", value="""
+                #     1. Make everyone disconnect and reconnect to the Voice Channel again.
+                #     2. Give me the 'Administrator' permission.
+                #     3. DM 'SCARECOW#0456' on discord.
+                #     """)
+                #     await ctx.send(embed=embed)
                 except Exception as e:
                     # me = client.get_user(187568903084441600)
                     # await me.send(f"{command_name} caused other: {e}")
-                    await ctx.channel.send("Something went wrong. You can try the following things:\n"
-                                           "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
-                                           "2. Give me the 'Administrator' permission.\n"
-                                           "3. DM `SCARECOW#0456` on discord.\n")
+                    embed.clear_fields()
+                    embed.add_field(name="Something went wrong. You can try the following things:", value="""
+                    1. Make everyone disconnect and reconnect to the Voice Channel again.
+                    2. Give me the 'Administrator' permission.
+                    3. DM `SCARECOW#0456` on discord.
+                    """)
+                    await ctx.send(embed=embed)
             else:
-                await ctx.channel.send("You don't have the `Mute Members` permission.")
+                embed.clear_fields()
+                embed.add_field(name="Error", value="You don't have the `Mute Members` permission.")
+                await ctx.send(embed=embed)
         else:
-            await ctx.send("You must join a voice channel first.")
+            embed.clear_fields()
+            embed.add_field(name="Error", value="You must join a voice channel first.")
+            await ctx.send(embed=embed)
     else:
-        await ctx.send("This does not work in DMs.")
+        embed.clear_fields()
+        embed.add_field(name="Error", value="This does not work in DMs.")
+        await ctx.send(embed=embed)
 
 
 # deafens everyone in the current voice channel
@@ -200,7 +224,9 @@ async def deafen(ctx):
 @client.command(aliases=["um", "un", "un-mute", "u", "U", "Un", "Um", "Unmute"])
 async def unmute(ctx):
     command_name = "unmute"
-    author = ctx.author
+    author = ctx.author  # command author
+    embed = discord.Embed(color=discord.Color.green())
+    botEmbed = discord.Embed(color=discord.Color.red())
 
     if ctx.guild:  # check if the msg was in a server's text channel
         if author.voice:  # check if the user is in a voice channel
@@ -208,41 +234,59 @@ async def unmute(ctx):
                 no_of_members = 0
                 for member in author.voice.channel.members:  # traverse through the members list in current vc
                     if not member.bot:  # check if member is not a bot
-                        await member.edit(mute=False)  # un-mute the non-bot member
+                        await member.edit(mute=False)  # unmute the non-bot member
                         no_of_members += 1
                     else:
                         await member.edit(mute=True)  # mute the bot member
-                        await ctx.send(f"Muted {member.name}")
+                        embed.clear_fields()
+                        botEmbed.set_author(name=f"Muted {member.name}")
+                        await ctx.send(embed=botEmbed)
+                        # embed.add_field(name="Status", value=f"Un-muted {member.name}")
                 if no_of_members == 0:
-                    await ctx.channel.send(f"Everyone, please disconnect and reconnect to the Voice Channel again.")
-                elif no_of_members < 2:
-                    await ctx.channel.send(f"Un-muted {no_of_members} user in {author.voice.channel}.")
+                    embed.clear_fields()
+                    embed.set_author(name="Everyone, please reconnect to the voice channel.")
+                    # embed.add_field(name="Error", value="Everyone, please reconnect to the voice channel.")
                 else:
-                    await ctx.channel.send(f"Un-muted {no_of_members} users in {author.voice.channel}.")
+                    embed.clear_fields()
+                    embed.set_author(name=f"Un-muted {no_of_members} user(s)")
+                    # embed.add_field(name="Status", value=f"Muted {no_of_members} users.")
+                await ctx.send(embed=embed)
 
-            except discord.Forbidden:
-                await ctx.channel.send(  # the bot doesn't have the permission to mute
-                    f"Please make sure I have the `Mute Members` permission in my role **and** in your current "
-                    f"voice channel `{author.voice.channel}`.")
-            except discord.HTTPException as e:
-                # me = client.get_user(187568903084441600)
-                # await me.send(f"{command_name} caused HTTPException: {e}")
-                await ctx.channel.send("Something went wrong. You can try the following things:\n"
-                                       "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
-                                       "2. Give me the 'Administrator' permission.\n"
-                                       "3. DM `SCARECOW#0456` on discord.\n")
+            except discord.Forbidden: # the bot doesn't have the permission to mute
+                embed.clear_fields()
+                embed.add_field(name="No Permission", value=f"""
+                Please make sure I have the `Mute Members` permission in my role **and** in your current voice channel `{author.voice.channel}`.
+                If it is still not working, try giving me the 'administrator' permission.
+                """)
+                await ctx.send(embed=embed)
+            # except discord.HTTPException as e:
+            #     # # me = client.get_user(187568903084441600)
+            #     # await me.send(f"{command_name} caused HTTPException: {e}")
+            #     embed.add_field(name="Something went wrong. You can try the following things:", value="""
+            #     1. Make everyone disconnect and reconnect to the Voice Channel again.
+            #     2. Give me the 'Administrator' permission.
+            #     3. DM 'SCARECOW#0456' on discord.
+            #     """)
+            #     await ctx.send(embed=embed)
             except Exception as e:
                 # me = client.get_user(187568903084441600)
                 # await me.send(f"{command_name} caused other: {e}")
-                await ctx.channel.send("Something went wrong. You can try the following things:\n"
-                                       "1. Make everyone disconnect and reconnect to the Voice Channel again.\n"
-                                       "2. Give me the 'Administrator' permission.\n"
-                                       "3. DM `SCARECOW#0456` on discord.\n")
+                embed.clear_fields()
+                embed.add_field(name="Something went wrong. You can try the following things:", value="""
+                1. Make everyone disconnect and reconnect to the Voice Channel again.
+                2. Give me the 'Administrator' permission.
+                3. DM `SCARECOW#0456` on discord.
+                """)
+                await ctx.send(embed=embed)
         else:
-            await ctx.send("You must join a voice channel first.")
+            embed.clear_fields()
+            embed.add_field(name="Error", value="You must join a voice channel first.")
+            await ctx.send(embed=embed)
     else:
-        await ctx.send("This does not work in DMs.")
-
+        embed.clear_fields()
+        embed.add_field(name="Error", value="This does not work in DMs.")
+        await ctx.send(embed=embed)
+    
 
 # un-deafens the user in the current voice channel
 @client.command(aliases=["udme", "Undeafenme"])
@@ -422,8 +466,8 @@ async def minion(ctx):
     command_name = "minion"
     author = ctx.author
 
-    DMEmbed = discord.Embed(color=discord.Color.orange())
-    ReplayEmbed = discord.Embed(color=discord.Color.orange())
+    DMEmbed = discord.Embed(color=discord.Color.orange())  # the msg that we are gonna send to the dm of the selected minion
+    ReplayEmbed = discord.Embed(color=discord.Color.orange())  # the msg that we are gonna send to the the server text channel
 
     if author.voice:  # check if the user is in a voice channel
         try:
@@ -570,6 +614,14 @@ async def start(ctx):
                                f"`Mute Members`, `Deafen Members`. Please contact `SCARECOW#0456` if this keeps "
                                f"happening. OR use the normal `.mute` and `.unmute`")
 
+
+# hotkey
+# @client.command()
+# async def a(ctx):
+#     while True:
+#         if ctx.author.voice.self_mute:
+#             await mute(ctx)
+#         await asyncio.sleep(1)
 
 # run the bot
 client.run(TOKEN)
