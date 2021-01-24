@@ -4,10 +4,9 @@ import random
 import os
 import asyncio
 
-# TOKEN = os.environ["TOKEN"]
-TOKEN = "NzY5NTM1MzIzOTkzNTM4NjEw.X5Qbng.ZsoI1ZOFBJugswDZFE5CMyrdPm4"
+TOKEN = os.environ["TOKEN"]
 
-client = commands.AutoShardedBot(command_prefix="?")
+client = commands.AutoShardedBot(command_prefix=".")
 
 client.remove_command("help")  # removes the default ".help" command
 
