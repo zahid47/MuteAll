@@ -349,7 +349,7 @@ async def tanner(ctx):
 
             ReplayEmbed.add_field(name="Selected a TANNER and sent them a DM.", value=f"Hey crewmates, there is a "
                                                                                       f"tanner among us! Find out who "
-                                                                                      f"it is and vote 'em off! "
+                                                                                      f"it is and don't vote 'em off! "
                                                                                       f" (Initiated by {author.name})",
                                   inline=False)
             await ctx.send(embed=ReplayEmbed)
