@@ -484,6 +484,24 @@ async def start(ctx):
         await show_common_error(ctx, embed, e)
 
 
+@client.command()
+async def stats(ctx):
+
+    guilds = client.guilds
+    no_of_guilds = len(guilds)
+    no_of_members = 0
+    
+    for guild in guilds:
+        no_of_members = no_of_members + guild.member_count
+
+    embed = discord.Embed(color=discord.Color.blurple())
+
+    embed.set_author(name="MuteAll Stats")
+    embed.add_field(name="Used In", value=f"{no_of_guilds} Servers")
+    embed.add_field(name="Used By", value=f"{no_of_members} Users")
+
+    await ctx.send(embed=embed)
+
 # hotkey
 # @client.command()
 # async def a(ctx):
