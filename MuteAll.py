@@ -6,8 +6,7 @@ import os
 
 TOKEN = os.environ["TOKEN"]
 
-intents = discord.Intents().all()
-client = commands.AutoShardedBot(command_prefix=".", intents=intents)
+client = commands.AutoShardedBot(command_prefix=".")
 
 client.remove_command("help")  # removes the default ".help" command
 
