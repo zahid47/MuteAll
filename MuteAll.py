@@ -4,8 +4,8 @@ import random
 import os
 import json
 
-TOKEN = os.environ["TOKEN"]
-
+# TOKEN = os.environ["TOKEN"]
+TOKEN = "NzY5NTM1MzIzOTkzNTM4NjEw.X5Qbng.qspPJsbfZX4AqG-dQbrM4XMfoRw"
 def get_prefix(client, message):
     with open("prefixes.json", "r") as f:
         prefixes = json.load(f)
@@ -51,6 +51,7 @@ async def invite(ctx):
 
 
 @client.command()
+@commands.has_permissions(administrator = True)
 async def changeprefix(ctx, prefix):
     with open ("prefixes.json", "r") as f:
         prefixes = json.load(f)
@@ -61,6 +62,16 @@ async def changeprefix(ctx, prefix):
         prefixes = json.dump(prefixes, f, indent=4)
 
     await ctx.send(f"prefix changed to {prefix}")
+
+@client.command()
+async def viewprefix(ctx):
+    with open("prefixes.json", "r") as f:
+        prefixes = json.load(f)
+        try:
+            prefix = prefixes[str(ctx.guild.id)]
+        except KeyError:
+            prefix = "."
+    await ctx.send(f"your prefix is {prefix}")
 
 # shows latency of the bot
 @client.command(aliases=["latency"])
@@ -77,9 +88,11 @@ async def help(ctx):
 
     embed.set_author(name="Available Commands")
 
-    embed.add_field(name="`.ping`", value="Latency of the bot", inline=False)
+    embed.add_field(name="`.ping`", value="latency of the bot", inline=False)
 
-    embed.add_field(name="`.changeprefix <your prefix here>`", value="change the prefix for your server", inline=False)
+    embed.add_field(name="`.changeprefix <your prefix here>`", value="change the prefix for your server (only admin can use this!)", inline=False)
+
+    embed.add_field(name="`.viewprefix`", value="view prefix for your server", inline=False)
 
     embed.add_field(name="`.invite`", value="Invite link", inline=False)
 
