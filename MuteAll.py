@@ -2,16 +2,26 @@ import discord
 from discord.ext import commands
 import random
 import os
+import json
 
 TOKEN = os.environ["TOKEN"]
 
-client = commands.AutoShardedBot(command_prefix=".")
+
+def get_prefix(client, message):
+    with open("prefixes.json", "r") as f:
+        prefixes = json.load(f)
+        try:
+            prefix = prefixes[str(message.guild.id)]
+        except KeyError:
+            prefix = "."
+    return prefix
+
+client = commands.AutoShardedBot(command_prefix=get_prefix)
 
 client.remove_command("help")  # removes the default ".help" command
 
+
 # sets status when the bot is ready
-
-
 @client.event
 async def on_ready():
     activity = discord.Activity(
@@ -41,6 +51,18 @@ async def invite(ctx):
     await ctx.send(embed=embed)
 
 
+@client.command()
+async def changeprefix(ctx, prefix):
+    with open ("prefixes.json", "r") as f:
+        prefixes = json.load(f)
+
+    prefixes[str(ctx.guild.id)] = prefix
+
+    with open ("prefixes.json", "w") as f:
+        prefixes = json.dump(prefixes, f, indent=4)
+
+    await ctx.send(f"prefix changed to {prefix}")
+
 # shows latency of the bot
 @client.command(aliases=["latency"])
 async def ping(ctx):
@@ -57,6 +79,8 @@ async def help(ctx):
     embed.set_author(name="Available Commands")
 
     embed.add_field(name="`.ping`", value="Latency of the bot", inline=False)
+
+    embed.add_field(name="`.changeprefix <your prefix here>`", value="change the prefix for your server", inline=False)
 
     embed.add_field(name="`.invite`", value="Invite link", inline=False)
 
@@ -75,11 +99,17 @@ async def help(ctx):
     embed.add_field(name="`.undeafenme` / `.udme`", value="Un-deafen only yourself.",
                     inline=False)
 
+    embed.add_field(name="`.all` / `.a`", value="Mute and Deafen everyone in your current voice channel.",
+                    inline=False)
+
+    embed.add_field(name="`.unall` / `.ua`", value="Un-mute and Un-deafen everyone in your current voice channel.",
+                    inline=False)
+
     embed.add_field(name="`.start` / `.s`", value="[BETA] React with emojies to mute or unmute, no need to type "
                                                   "anymore! ", inline=False)
 
     embed.add_field(name="`.end` / `.e`",
-                    value="End the game, un-mute everyone (including bots)", inline=False)
+                    value="End the game, un-mute and un-deafen everyone (including bots)", inline=False)
 
     embed.add_field(name="`.tanner` / `.t`", value="Add a new role to the game! The bot randomly selects a user "
                                                    "in the voice channel to be the secret tanner. The tanner can only "
