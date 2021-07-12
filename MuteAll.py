@@ -401,7 +401,7 @@ async def undeafen(ctx, *args):
                     mentioned_users.append(int(user[3:-1]))
         users_to_be_undeafened = mentioned_users + mentioned_users_from_role
         if len(users_to_be_undeafened) == 0:
-            await deafen(ctx)
+            await undeafen(ctx)
         else:
             if ctx.guild:  # check if the msg was in a server's text channel
                 if ctx.author.voice:  # check if the user is in a voice channel
