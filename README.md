@@ -13,3 +13,6 @@ The bot has many more commands like adding new roles to the game. So if you are 
 [Invite The Bot](https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot&permissions=12659776)
 
 [Join Support Server](https://discord.gg/8hrhffR6aX)
+
+
+You are free to look at the code but BEWARE!!! it is a big pile of mess. When I first started working on this I didn't know i'd have to scale it this much. And now I'm too lazy to refactor it. Soooo yeah.....good luck?
