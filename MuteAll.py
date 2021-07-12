@@ -4,8 +4,8 @@ import random
 import os
 import json
 
-# TOKEN = os.environ["TOKEN"]
-TOKEN = "NzY5NTM1MzIzOTkzNTM4NjEw.X5Qbng.qspPJsbfZX4AqG-dQbrM4XMfoRw"
+TOKEN = os.environ["TOKEN"]
+
 def get_prefix(client, message):
     with open("prefixes.json", "r") as f:
         prefixes = json.load(f)
