@@ -6,7 +6,6 @@ import json
 
 TOKEN = os.environ["TOKEN"]
 
-
 def get_prefix(client, message):
     with open("prefixes.json", "r") as f:
         prefixes = json.load(f)
