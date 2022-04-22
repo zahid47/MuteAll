@@ -10,7 +10,7 @@ The bot has many more commands like adding new roles to the game. So if you are 
 
 
 # Links
-[Invite The Bot](https://discord.com/oauth2/authorize?client_id=757369495953342593&scope=bot&permissions=12659776)
+[Invite The Bot](https://discord.com/api/oauth2/authorize?client_id=757369495953342593&permissions=12659776&scope=bot%20applications.commands)
 
 [Join Support Server](https://discord.gg/8hrhffR6aX)
 
