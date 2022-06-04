@@ -113,7 +113,7 @@ Start the bot
 
 - How do I only mute a specific user or role?
 
-  - Just mention the users or roles after your command! Ex: `.m @username @rolename`
+  - Just mention the users or roles in the "mentions" option after your command Ex: `/mute mentions: @username @rolename`. You can also mention multiple users and roles.
 
 <!-- Contact -->
 <br>
@@ -127,5 +127,6 @@ scarecow#2857 on discord
 
 ## Acknowledgements and special Thanks
 
-- [discord.py](https://github.com/Rapptz/discord.py)
+- ~~[discord.py](https://github.com/Rapptz/discord.py)~~
+- [pycord](https://github.com/Pycord-Development/pycord)
 - [awesome-readme-template](https://github.com/Louis3797/awesome-readme-template)
