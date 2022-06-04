@@ -7,6 +7,12 @@
   
   <p>This bot was made for groups of friends who play among us together and use discord to communicate. Sometimes people can't or forget to mute themselves and accidentally talk during the game. With this bot, you can mute everyone with a simple command at the start of each game!</p>
 
+  <a href="https://top.gg/bot/757369495953342593">
+  <img src="https://top.gg/api/widget/upvotes/757369495953342593.svg">
+
+  <a href="https://top.gg/bot/757369495953342593">
+  <img src="https://top.gg/api/widget/owner/757369495953342593.svg">
+
 <br />
 
 [Invite The Bot](https://discord.com/api/oauth2/authorize?client_id=757369495953342593&permissions=12659776&scope=bot%20applications.commands)
