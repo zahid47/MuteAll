@@ -1,1 +1,1 @@
-worker: python MuteAll.py
+worker: python -m MuteAll

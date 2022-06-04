@@ -1,56 +1,72 @@
 import discord
-from discord.ext import commands
 
 
 async def help(ctx):
-    embed = discord.Embed(color=discord.Color.lighter_grey())
+    embed = discord.Embed()
 
-    embed.set_author(name="Available Commands")
+    embed.set_author(name="Help")
 
-    embed.add_field(name="`.ping`", value="latency of the bot", inline=False)
-
-    embed.add_field(name="`.changeprefix <your prefix here>`",
-                    value="change the prefix for your server (only admin can use this!)", inline=False)
-
-    embed.add_field(name="`.viewprefix`",
-                    value="view prefix for your server", inline=False)
-
-    embed.add_field(name="`.mute` / `.m`", value="Mute humans and un-mute bots in your current voice channel.",
-                    inline=False)
-
-    embed.add_field(name="`.unmute` / `.u`", value="Un-mute humans and mute bots in your current voice channel.",
-                    inline=False)
-
-    embed.add_field(name="`.deafen` / `.d`", value="Deafen everyone in your current voice channel.",
-                    inline=False)
-
-    embed.add_field(name="`.undeafen` / `.ud`", value="Un-deafen everyone in your current voice channel.",
-                    inline=False)
-
-    embed.add_field(name="`.undeafenme` / `.udme`", value="Un-deafen only yourself.",
-                    inline=False)
-
-    embed.add_field(name="`.all` / `.a`", value="Mute and Deafen everyone in your current voice channel.",
-                    inline=False)
-
-    embed.add_field(name="`.unall` / `.ua`", value="Un-mute and Un-deafen everyone in your current voice channel.",
-                    inline=False)
-
-    embed.add_field(name="`.end` / `.e`",
-                    value="End the game, un-mute and un-deafen everyone (including bots)", inline=False)
+    embed.add_field(name="Slash Commands",
+                    value="Press / to view all the available commands", inline=False)
 
     embed.add_field(name="Bot not muting everyone?",
                     value="Ask everyone to reconnect to the voice channel.", inline=False)
 
     embed.add_field(
-        name="_", value="[Join support server](https://discord.gg/8hrhffR6aX)", inline=False)
+        name="Need more help?", value="[Join support server](https://discord.gg/8hrhffR6aX)", inline=False)
 
-    await ctx.send(embed=embed)
+    await ctx.respond(embed=embed)
+
+
+# async def help(ctx):
+#     embed = discord.Embed(color=discord.Color.lighter_grey())
+
+#     embed.set_author(name="Available Commands")
+
+#     embed.add_field(name="`.ping`", value="latency of the bot", inline=False)
+
+#     embed.add_field(name="`.changeprefix <your prefix here>`",
+#                     value="change the prefix for your server (only admin can use this!)", inline=False)
+
+#     embed.add_field(name="`.viewprefix`",
+#                     value="view prefix for your server", inline=False)
+
+#     embed.add_field(name="`.mute` / `.m`", value="Mute humans and un-mute bots in your current voice channel.",
+#                     inline=False)
+
+#     embed.add_field(name="`.unmute` / `.u`", value="Un-mute humans and mute bots in your current voice channel.",
+#                     inline=False)
+
+#     embed.add_field(name="`.deafen` / `.d`", value="Deafen everyone in your current voice channel.",
+#                     inline=False)
+
+#     embed.add_field(name="`.undeafen` / `.ud`", value="Un-deafen everyone in your current voice channel.",
+#                     inline=False)
+
+#     embed.add_field(name="`.undeafenme` / `.udme`", value="Un-deafen only yourself.",
+#                     inline=False)
+
+#     embed.add_field(name="`.all` / `.a`", value="Mute and Deafen everyone in your current voice channel.",
+#                     inline=False)
+
+#     embed.add_field(name="`.unall` / `.ua`", value="Un-mute and Un-deafen everyone in your current voice channel.",
+#                     inline=False)
+
+#     embed.add_field(name="`.end` / `.e`",
+#                     value="End the game, un-mute and un-deafen everyone (including bots)", inline=False)
+
+#     embed.add_field(name="Bot not muting everyone?",
+#                     value="Ask everyone to reconnect to the voice channel.", inline=False)
+
+#     embed.add_field(
+#         name="_", value="[Join support server](https://discord.gg/8hrhffR6aX)", inline=False)
+
+#     await ctx.send(embed=embed)
 
 
 def can_do(ctx):
-    if not ctx.guild:
-        return "This does not work in DMs"
+    # if not ctx.guild:
+    #     return "This does not work in DMs"
 
     if not ctx.author.voice:
         return "You must join a voice channel first"
@@ -72,36 +88,47 @@ def has_role(member, role_id):
     return False
 
 
-async def get_affected_users(ctx, args):
+# def remove_empty_items(arr: list):
+#     non_empty_arr: list = []
 
-    mentioned_users = []
+#     for item in arr:
+#         if len(item) > 1:
+#             non_empty_arr.append(item)
 
-    for user in args:
+#     return non_empty_arr
+
+
+def get_affected_users(ctx, mentions):
+
+    mentions: list = mentions.split(" ")
+    affected_users = []
+
+    for mention in mentions:
 
         # check if they actually mentioned a user or role
-        if len(user) != 22 and len(user) != 21:
-            return []
+        if len(mention) != 22:
+            continue
 
-        if user[2] == "&":  # 3rd element == & means they mentioned a role
+        if mention[2] == "&":  # 3rd element == & means they mentioned a role
             for member in ctx.author.voice.channel.members:
-                role_id = int(user[3:-1])
+                role_id = int(mention[3:-1])
                 if has_role(member, role_id):
-                    mentioned_users.append(member)
+                    affected_users.append(member)
         else:
             for member in ctx.author.voice.channel.members:
-                if member.id == int(user[2:-1]):
-                    mentioned_users.append(member)
+                if member.id == int(mention[3:-1]):
+                    affected_users.append(member)
 
-    return mentioned_users
+    return affected_users
 
 
-async def stats(ctx, client):
+async def stats(ctx, bot):
 
-    guilds = client.guilds
+    guilds = bot.guilds
     no_of_guilds = len(guilds)
     no_of_members = 0
 
     for guild in guilds:
         no_of_members = no_of_members + guild.member_count
 
-    await ctx.send(f"MuteAll is serving a total of {no_of_members} users in {no_of_guilds} servers!")
+    await ctx.respond(f"MuteAll is used by a total of `{no_of_members}` users in `{no_of_guilds}` servers!")

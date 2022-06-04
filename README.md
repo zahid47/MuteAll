@@ -96,7 +96,7 @@ Start the bot
 
 ## Todo
 
-- [ ] Add slash commands and buttons
+- [x] Add slash commands and buttons
 
 <!-- FAQ -->
 <br>
