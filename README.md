@@ -68,7 +68,7 @@ To run this project yourself, you will need to add the following environment var
 
 `DISCORD_TOKEN`
 
-`MONGO_STRING`
+~~`MONGO_STRING`~~
 
 <!-- Run Locally -->
 <br>
