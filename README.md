@@ -34,7 +34,8 @@
 ### Tech Stack
 
   <ul>
-    <li><a href="https://github.com/Rapptz/discord.py">discord.py</a></li>
+    <s><li><a href="https://github.com/Rapptz/discord.py">discord.py</a></li></s>
+    <li><a href="https://github.com/Pycord-Development/pycord">pycord</a></li>
     <li><a href="https://pymongo.readthedocs.io/en/stable/">PyMongo</a></li>
   </ul>
 
@@ -42,8 +43,9 @@
 
 ### How to use
 
-- Type `.help` to view all the available commands
-- Type `.m` to mute and `.u` to unmute everyone in your current voice channel
+- Press `/` to view all the commands
+- Use slash commands /mute, /unmute, etc.
+- Mentions users and roles in the "mention" option to mute/unmute specific users
 
 <br>
 
@@ -104,7 +106,7 @@ Start the bot
 
 ## Todo
 
-- [x] Add slash commands and buttons
+- [x] Implement slash commands
 
 <!-- FAQ -->
 <br>
