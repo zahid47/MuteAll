@@ -3,7 +3,7 @@ import discord
 
 async def on_ready(bot):
     activity = discord.Activity(
-        name="for slash commands! Use / to command the bot, prefixes are no longer supported", type=discord.ActivityType.watching)
+        name="for slash commands", type=discord.ActivityType.watching)
     await bot.change_presence(status=discord.Status.online, activity=activity)
     print(f"Logged in as {bot.user}")
 
