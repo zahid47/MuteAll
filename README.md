@@ -17,7 +17,7 @@
 
 <br />
 
-[Invite The Bot](https://discord.com/api/oauth2/authorize?client_id=757369495953342593&permissions=12659776&scope=bot%20applications.commands)
+[Invite The Bot](https://discord.com/api/oauth2/authorize?client_id=757369495953342593&permissions=2160143424&scope=applications.commands%20bot)
 
 [Join Support Server](https://discord.gg/8hrhffR6aX)
 
