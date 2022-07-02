@@ -23,9 +23,9 @@ async def ping(ctx: discord.ApplicationContext):
 
 
 @bot.slash_command(name="help", description="get some help!")
-async def help(ctx: discord.ApplicationContext):
-    help = get_help()
-    await ctx.respond(embed=help)
+async def help_command(ctx: discord.ApplicationContext):
+    help_embed = get_help()
+    await ctx.respond(embed=help_embed)
 
 
 @bot.slash_command(name="stats", description="show stats")
@@ -108,7 +108,7 @@ async def undeafen(ctx: discord.ApplicationContext,
 
 
 @bot.slash_command(name="all", description="mute and deafen people!")
-async def all(ctx: discord.ApplicationContext,
+async def all_command(ctx: discord.ApplicationContext,
               mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
     await do_all(ctx, mentions)
