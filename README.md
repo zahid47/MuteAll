@@ -3,17 +3,17 @@
   <img src="logo.png" alt="logo" width="200" height="auto" />
 
   <h1>MuteAll</h1>
+
+  <a href="https://top.gg/bot/757369495953342593">
+    <img src="https://top.gg/api/widget/owner/757369495953342593.svg">
+  </a>
   
   
   <p>This bot was made for groups of friends who play among us together and use discord to communicate. Sometimes people can't or forget to mute themselves and accidentally talk during the game. With this bot, you can mute everyone with a simple command at the start of each game!</p>
 
-  <a href="https://top.gg/bot/757369495953342593">
-    <img src="https://top.gg/api/widget/owner/757369495953342593.svg?noavatar=true">
-  </a>
-
 <br />
 
-[Invite The Bot](https://discord.com/api/oauth2/authorize?client_id=757369495953342593&permissions=2160143424&scope=applications.commands%20bot)
+[Invite The Bot](https://discord.com/api/oauth2/authorize?client_id=757369495953342593&permissions=2160421952&scope=bot%20applications.commands)
 
 [Join Support Server](https://discord.gg/8hrhffR6aX)
 
@@ -33,8 +33,8 @@
 
   <ul>
     <s><li><a href="https://github.com/Rapptz/discord.py">discord.py</a></li></s>
+    <s><li><a href="https://pymongo.readthedocs.io/en/stable/">PyMongo</a></li></s>
     <li><a href="https://github.com/Pycord-Development/pycord">pycord</a></li>
-    <li><a href="https://pymongo.readthedocs.io/en/stable/">PyMongo</a></li>
   </ul>
 
 <!-- Features -->
