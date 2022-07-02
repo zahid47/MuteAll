@@ -108,7 +108,7 @@ async def add_reactions(ctx, emojis):
         return await ctx.respond(canDo)
 
     embed = discord.Embed()
-    embed.set_author(name="Reaction Commands")  
+    embed.set_author(name="Reaction Commands")
     embed.add_field(name=emojis["MUTE"], value="mute")
     embed.add_field(name=emojis["UNMUTE"], value="un-mute")
     embed.add_field(name=emojis["DEAFEN"], value="deafen")

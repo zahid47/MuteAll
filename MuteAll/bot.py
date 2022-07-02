@@ -109,15 +109,15 @@ async def undeafen(ctx: discord.ApplicationContext,
 
 @bot.slash_command(name="all", description="mute and deafen people!")
 async def all_command(ctx: discord.ApplicationContext,
-              mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
+                      mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
     await do_all(ctx, mentions)
     await ctx.respond("👍")
 
 
 @bot.slash_command(name="a", description="mute and deafen people!")
-async def all(ctx: discord.ApplicationContext,
-              mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
+async def all_command(ctx: discord.ApplicationContext,
+                      mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
     await do_all(ctx, mentions)
     await ctx.respond("👍")
