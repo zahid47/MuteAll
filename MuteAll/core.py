@@ -3,7 +3,9 @@ from MuteAll.errors import show_common_error, show_permission_error
 from MuteAll.utils import can_do, get_affected_users
 
 
-async def do(ctx, task="mute", members=[]):
+async def do(ctx, task="mute", members=None):
+    if members is None:
+        members = []
     try:
         for member in members:
             match task:
