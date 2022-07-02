@@ -1,14 +1,20 @@
 import discord
 import os
-from MuteAll import events, utils, core
+from MuteAll.core import do_mute, do_unmute, do_deafen, do_undeafen, do_all, do_unall, add_reactions
+from MuteAll.events import handle_ready, handle_reaction
+from MuteAll.utils import get_help, get_stats
+from MuteAll.emojis import get_emojis
 
 bot = discord.AutoShardedBot()
 
 
-# sets status when the bot is ready
+def run():
+    bot.run(os.getenv("DISCORD_TOKEN"))
+
+
 @bot.event
 async def on_ready():
-    await events.on_ready(bot)
+    await handle_ready(bot)
 
 
 @bot.slash_command(name="ping", description="show latency of the bot")
@@ -18,23 +24,31 @@ async def ping(ctx: discord.ApplicationContext):
 
 @bot.slash_command(name="help", description="get some help!")
 async def help(ctx: discord.ApplicationContext):
-    await utils.help(ctx)
+    help = get_help()
+    await ctx.respond(embed=help)
 
+
+@bot.slash_command(name="stats", description="show stats")
+async def stats(ctx: discord.ApplicationContext):
+    guilds, members = get_stats(bot)
+    await ctx.respond(f"MuteAll is used by a total of `{members}` users in `{guilds}` servers!")
+
+
+### MAIN COMMANDS ###
 
 @bot.slash_command(name="mute", description="server mute people!")
 async def mute(ctx: discord.ApplicationContext,
                mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    can_do = utils.can_do(ctx)
-    if can_do != "OK":
-        return await ctx.respond(can_do)
+    await do_mute(ctx, mentions)
+    await ctx.respond("👍")
 
-    if len(mentions) == 0:
-        members = ctx.author.voice.channel.members
-    else:
-        members = utils.get_affected_users(ctx, mentions)
 
-    await core.do(ctx, task="mute", members=members)
+@bot.slash_command(name="m", description="server mute people!")
+async def mute(ctx: discord.ApplicationContext,
+               mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
+
+    await do_mute(ctx, mentions)
     await ctx.respond("👍")
 
 
@@ -42,28 +56,39 @@ async def mute(ctx: discord.ApplicationContext,
 async def unmute(ctx: discord.ApplicationContext,
                  mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    if len(mentions) == 0:
-        members = ctx.author.voice.channel.members
-    else:
-        members = utils.get_affected_users(ctx, mentions)
+    await do_unmute(ctx, mentions)
+    await ctx.respond("👍")
 
-    await core.do(ctx, task="unmute", members=members)
+
+@bot.slash_command(name="u", description="unmute people!")
+async def unmute(ctx: discord.ApplicationContext,
+                 mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
+
+    await do_unmute(ctx, mentions)
+    await ctx.respond("👍")
+
+
+@bot.slash_command(name="um", description="unmute people!")
+async def unmute(ctx: discord.ApplicationContext,
+                 mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
+
+    await do_unmute(ctx, mentions)
     await ctx.respond("👍")
 
 
 @bot.slash_command(name="deafen", description="deafen people!")
 async def deafen(ctx: discord.ApplicationContext,
                  mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
-    can_do = utils.can_do(ctx)
-    if can_do != "OK":
-        return await ctx.respond(can_do)
 
-    if len(mentions) == 0:
-        members = ctx.author.voice.channel.members
-    else:
-        members = utils.get_affected_users(ctx, mentions)
+    await do_deafen(ctx, mentions)
+    await ctx.respond("👍")
 
-    await core.do(ctx, task="deafen", members=members)
+
+@bot.slash_command(name="d", description="deafen people!")
+async def deafen(ctx: discord.ApplicationContext,
+                 mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
+
+    await do_deafen(ctx, mentions)
     await ctx.respond("👍")
 
 
@@ -71,29 +96,30 @@ async def deafen(ctx: discord.ApplicationContext,
 async def undeafen(ctx: discord.ApplicationContext,
                    mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    if len(mentions) == 0:
-        members = ctx.author.voice.channel.members
-    else:
-        members = utils.get_affected_users(ctx, mentions)
-
-    await core.do(ctx, task="undeafen", members=members)
+    await do_undeafen(ctx, mentions)
     await ctx.respond("👍")
+
+
+@bot.slash_command(name="ud", description="undeafen people!")
+async def undeafen(ctx: discord.ApplicationContext,
+                   mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
+
+    await do_undeafen(ctx, mentions)
 
 
 @bot.slash_command(name="all", description="mute and deafen people!")
 async def all(ctx: discord.ApplicationContext,
               mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    can_do = utils.can_do(ctx)
-    if can_do != "OK":
-        return await ctx.respond(can_do)
+    await do_all(ctx, mentions)
+    await ctx.respond("👍")
 
-    if len(mentions) == 0:
-        members = ctx.author.voice.channel.members
-    else:
-        members = utils.get_affected_users(ctx, mentions)
 
-    await core.do(ctx, task="all", members=members)
+@bot.slash_command(name="a", description="mute and deafen people!")
+async def all(ctx: discord.ApplicationContext,
+              mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
+
+    await do_all(ctx, mentions)
     await ctx.respond("👍")
 
 
@@ -101,25 +127,34 @@ async def all(ctx: discord.ApplicationContext,
 async def unall(ctx: discord.ApplicationContext,
                 mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    if len(mentions) == 0:
-        members = ctx.author.voice.channel.members
-    else:
-        members = utils.get_affected_users(ctx, mentions)
-
-    await core.do(ctx, task="unall", members=members)
+    await do_unall(ctx, mentions)
     await ctx.respond("👍")
 
 
-@bot.slash_command(name="stats", description="show stats")
-async def stats(ctx: discord.ApplicationContext):
-    await utils.stats(ctx, bot)
+@bot.slash_command(name="ua", description="unmute and undeafen people!")
+async def unall(ctx: discord.ApplicationContext,
+                mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
+
+    await do_unall(ctx, mentions)
+    await ctx.respond("👍")
 
 
-# DEPRECATED
+@bot.slash_command(name="react", description="do everything using reactions!")
+async def react(ctx: discord.ApplicationContext):
+    emojis = get_emojis(bot)
+    await add_reactions(ctx, emojis)
+
+    @bot.event
+    async def on_reaction_add(reaction: discord.Reaction, user: discord.User):
+        await handle_reaction(reaction, user, bot, ctx)
+
+
+# DEPRECATED #################################################
+
 # # respond a help msg when the bot joins a server
 # @bot.event
 # async def on_guild_join(guild):
-#     await events.on_guild_join(guild)
+#     await on_guild_join(guild)
 
 
 # @bot.command()
@@ -137,15 +172,12 @@ async def stats(ctx: discord.ApplicationContext):
 #     if len(args) == 0:
 #         members = ctx.author.voice.channel.members
 #     else:
-#         members = await utils.get_affected_users(ctx, args)
+#         members = await get_affected_users(ctx, args)
 
-#     await core.do(ctx, task="end", members=members)
+#     await do(ctx, task="end", members=members)
 
 # @bot.command(aliases=["udme", "Undeafenme"])
 # async def undeafenme(ctx):
-#     await core.do(ctx, task="undeafen", members=[ctx.author])
-# DEPRECATED
+#     await do(ctx, task="undeafen", members=[ctx.author])
 
-# run the bot
-def run():
-    bot.run(os.getenv("DISCORD_TOKEN"))
+# DEPRECATED #################################################

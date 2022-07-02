@@ -1,7 +1,7 @@
 import discord
 
 
-async def help(ctx):
+def get_help():
     embed = discord.Embed()
 
     embed.set_author(name="Help")
@@ -15,7 +15,7 @@ async def help(ctx):
     embed.add_field(
         name="Need more help?", value="[Join support server](https://discord.gg/8hrhffR6aX)", inline=False)
 
-    await ctx.respond(embed=embed)
+    return embed
 
 
 # async def help(ctx):
@@ -122,7 +122,7 @@ def get_affected_users(ctx, mentions):
     return affected_users
 
 
-async def stats(ctx, bot):
+def get_stats(bot):
 
     guilds = bot.guilds
     no_of_guilds = len(guilds)
@@ -131,4 +131,4 @@ async def stats(ctx, bot):
     for guild in guilds:
         no_of_members = no_of_members + guild.member_count
 
-    await ctx.respond(f"MuteAll is used by a total of `{no_of_members}` users in `{no_of_guilds}` servers!")
+    return no_of_guilds, no_of_members
