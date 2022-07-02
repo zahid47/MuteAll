@@ -104,7 +104,6 @@ Start the bot
 
 ## Todo
 
-- [ ] Add a badge for stats on github
 - [x] Implement slash commands
 
 <!-- FAQ -->
