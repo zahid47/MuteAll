@@ -24,17 +24,17 @@ async def handle_reaction(reaction, user, bot, ctx):
 
     emojis = get_emojis(bot)
 
-    if (reaction.emoji == emojis["MUTE"]):
+    if reaction.emoji == emojis["MUTE"]:
         await do_mute(ctx, [])
-    elif (reaction.emoji == emojis["UNMUTE"]):
+    elif reaction.emoji == emojis["UNMUTE"]:
         await do_unmute(ctx, [])
-    elif (reaction.emoji == emojis["DEAFEN"]):
+    elif reaction.emoji == emojis["DEAFEN"]:
         await do_deafen(ctx, [])
-    elif (reaction.emoji == emojis["UNDEAFEN"]):
+    elif reaction.emoji == emojis["UNDEAFEN"]:
         await do_undeafen(ctx, [])
-    elif (reaction.emoji == emojis["ALL"]):
+    elif reaction.emoji == emojis["ALL"]:
         await do_all(ctx, [])
-    elif (reaction.emoji == emojis["UNALL"]):
+    elif reaction.emoji == emojis["UNALL"]:
         await do_unall(ctx, [])
     else:
         await show_common_error(ctx, "Reaction Error")
