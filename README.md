@@ -11,15 +11,13 @@
     <img src="https://top.gg/api/widget/owner/757369495953342593.svg?noavatar=true">
   </a>
 
-  <a href="https://top.gg/bot/757369495953342593">
-    <img src="https://top.gg/api/widget/upvotes/757369495953342593.svg?noavatar=true">
-  </a>
-
 <br />
 
 [Invite The Bot](https://discord.com/api/oauth2/authorize?client_id=757369495953342593&permissions=2160143424&scope=applications.commands%20bot)
 
 [Join Support Server](https://discord.gg/8hrhffR6aX)
+
+![Discord](https://img.shields.io/discord/764450861141196802?color=5865f2&label=Discord&logo=Discord&logoColor=white)
 
 </div>
 
@@ -106,6 +104,7 @@ Start the bot
 
 ## Todo
 
+- [ ] Add a badge for stats on github
 - [x] Implement slash commands
 
 <!-- FAQ -->
