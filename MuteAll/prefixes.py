@@ -18,7 +18,7 @@
 #     try:
 #         result = prefixes_collection.find_one({"_id": message.guild.id})
 #         return result["prefix"]
-        
+
 #     except:
 #         return "."
 
