@@ -1,4 +1,5 @@
 import discord
+from MuteAll.errors import show_common_error, show_permission_error
 
 
 def get_help():
@@ -16,6 +17,91 @@ def get_help():
         name="Need more help?", value="[Join support server](https://discord.gg/8hrhffR6aX)", inline=False)
 
     return embed
+
+
+async def handle_errors(ctx, bot, function, mentions):
+    try:
+        await function(ctx, mentions)
+
+    except discord.Forbidden:  # the bot doesn't have the permission to do this
+        return await show_permission_error(ctx)
+    except Exception as e:
+        return await show_common_error(ctx, bot, e)
+
+
+def can_do(ctx, requiredPermissions=[]):
+    if not ctx.guild:
+        return "This does not work in DMs"
+
+    if not ctx.author.voice:
+        return "You must join a voice channel first"
+
+    if "mute" in requiredPermissions:
+        if not ctx.author.guild_permissions.mute_members:
+            return "You don't have the `Mute Members` permission"
+
+    if "defean" in requiredPermissions:
+        if not ctx.author.guild_permissions.deafen_members:
+            return "You don't have the `Deafen Members` permission"
+
+    return "OK"
+
+
+def has_role(member, role_id):
+
+    role_ids = []
+    for role in member.roles:
+        role_ids.append(role.id)
+
+    if role_id in role_ids:
+        return True
+    return False
+
+
+def get_affected_users(ctx, mentions):
+
+    mentions: list = mentions.split(" ")
+    affected_users = []
+
+    for mention in mentions:
+
+        # check if they actually mentioned a user or role
+        if len(mention) != 22:
+            continue
+
+        if mention[2] == "&":  # 3rd element == & means they mentioned a role
+            for member in ctx.author.voice.channel.members:
+                role_id = int(mention[3:-1])
+                if has_role(member, role_id):
+                    affected_users.append(member)
+        else:
+            for member in ctx.author.voice.channel.members:
+                if member.id == int(mention[3:-1]):
+                    affected_users.append(member)
+
+    return affected_users
+
+
+def get_stats(bot):
+
+    guilds = bot.guilds
+    no_of_guilds = len(guilds)
+    no_of_members = 0
+
+    for guild in guilds:
+        no_of_members = no_of_members + guild.member_count
+
+    return no_of_guilds, no_of_members
+
+
+# def remove_empty_items(arr: list):
+#     non_empty_arr: list = []
+
+#     for item in arr:
+#         if len(item) > 1:
+#             non_empty_arr.append(item)
+
+#     return non_empty_arr
 
 
 # async def help(ctx):
@@ -62,73 +148,3 @@ def get_help():
 #         name="_", value="[Join support server](https://discord.gg/8hrhffR6aX)", inline=False)
 
 #     await ctx.send(embed=embed)
-
-
-def can_do(ctx):
-    # if not ctx.guild:
-    #     return "This does not work in DMs"
-
-    if not ctx.author.voice:
-        return "You must join a voice channel first"
-
-    if not ctx.author.guild_permissions.mute_members:
-        return "You don't have the `Mute Members` permission"
-
-    return "OK"
-
-
-def has_role(member, role_id):
-
-    role_ids = []
-    for role in member.roles:
-        role_ids.append(role.id)
-
-    if role_id in role_ids:
-        return True
-    return False
-
-
-# def remove_empty_items(arr: list):
-#     non_empty_arr: list = []
-
-#     for item in arr:
-#         if len(item) > 1:
-#             non_empty_arr.append(item)
-
-#     return non_empty_arr
-
-
-def get_affected_users(ctx, mentions):
-
-    mentions: list = mentions.split(" ")
-    affected_users = []
-
-    for mention in mentions:
-
-        # check if they actually mentioned a user or role
-        if len(mention) != 22:
-            continue
-
-        if mention[2] == "&":  # 3rd element == & means they mentioned a role
-            for member in ctx.author.voice.channel.members:
-                role_id = int(mention[3:-1])
-                if has_role(member, role_id):
-                    affected_users.append(member)
-        else:
-            for member in ctx.author.voice.channel.members:
-                if member.id == int(mention[3:-1]):
-                    affected_users.append(member)
-
-    return affected_users
-
-
-def get_stats(bot):
-
-    guilds = bot.guilds
-    no_of_guilds = len(guilds)
-    no_of_members = 0
-
-    for guild in guilds:
-        no_of_members = no_of_members + guild.member_count
-
-    return no_of_guilds, no_of_members

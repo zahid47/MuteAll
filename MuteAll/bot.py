@@ -1,8 +1,9 @@
 import discord
 import os
 from MuteAll.core import do_mute, do_unmute, do_deafen, do_undeafen, do_all, do_unall, add_reactions
+from MuteAll.errors import show_common_error, show_permission_error
 from MuteAll.events import handle_ready, handle_reaction
-from MuteAll.utils import get_help, get_stats
+from MuteAll.utils import get_help, get_stats, handle_errors
 from MuteAll.emojis import get_emojis
 
 bot = discord.AutoShardedBot()
@@ -40,7 +41,7 @@ async def stats(ctx: discord.ApplicationContext):
 async def mute(ctx: discord.ApplicationContext,
                mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_mute(ctx, mentions)
+    await handle_errors(ctx, bot, do_mute, mentions)
     await ctx.respond("👍")
 
 
@@ -48,7 +49,7 @@ async def mute(ctx: discord.ApplicationContext,
 async def mute(ctx: discord.ApplicationContext,
                mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_mute(ctx, mentions)
+    await handle_errors(ctx, bot, do_mute, mentions)
     await ctx.respond("👍")
 
 
@@ -56,7 +57,7 @@ async def mute(ctx: discord.ApplicationContext,
 async def unmute(ctx: discord.ApplicationContext,
                  mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_unmute(ctx, mentions)
+    await handle_errors(ctx, bot, do_unmute, mentions)
     await ctx.respond("👍")
 
 
@@ -64,7 +65,7 @@ async def unmute(ctx: discord.ApplicationContext,
 async def unmute(ctx: discord.ApplicationContext,
                  mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_unmute(ctx, mentions)
+    await handle_errors(ctx, bot, do_unmute, mentions)
     await ctx.respond("👍")
 
 
@@ -72,7 +73,7 @@ async def unmute(ctx: discord.ApplicationContext,
 async def unmute(ctx: discord.ApplicationContext,
                  mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_unmute(ctx, mentions)
+    await handle_errors(ctx, bot, do_unmute, mentions)
     await ctx.respond("👍")
 
 
@@ -80,7 +81,7 @@ async def unmute(ctx: discord.ApplicationContext,
 async def deafen(ctx: discord.ApplicationContext,
                  mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_deafen(ctx, mentions)
+    await handle_errors(ctx, bot, do_deafen, mentions)
     await ctx.respond("👍")
 
 
@@ -88,7 +89,7 @@ async def deafen(ctx: discord.ApplicationContext,
 async def deafen(ctx: discord.ApplicationContext,
                  mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_deafen(ctx, mentions)
+    await handle_errors(ctx, bot, do_deafen, mentions)
     await ctx.respond("👍")
 
 
@@ -96,7 +97,7 @@ async def deafen(ctx: discord.ApplicationContext,
 async def undeafen(ctx: discord.ApplicationContext,
                    mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_undeafen(ctx, mentions)
+    await handle_errors(ctx, bot, do_undeafen, mentions)
     await ctx.respond("👍")
 
 
@@ -104,14 +105,14 @@ async def undeafen(ctx: discord.ApplicationContext,
 async def undeafen(ctx: discord.ApplicationContext,
                    mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_undeafen(ctx, mentions)
+    await handle_errors(ctx, bot, do_undeafen, mentions)
 
 
 @bot.slash_command(name="all", description="mute and deafen people!")
 async def all_command(ctx: discord.ApplicationContext,
                       mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_all(ctx, mentions)
+    await handle_errors(ctx, bot, do_all, mentions)
     await ctx.respond("👍")
 
 
@@ -119,7 +120,7 @@ async def all_command(ctx: discord.ApplicationContext,
 async def all_command(ctx: discord.ApplicationContext,
                       mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_all(ctx, mentions)
+    await handle_errors(ctx, bot, do_all, mentions)
     await ctx.respond("👍")
 
 
@@ -127,7 +128,7 @@ async def all_command(ctx: discord.ApplicationContext,
 async def unall(ctx: discord.ApplicationContext,
                 mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_unall(ctx, mentions)
+    await handle_errors(ctx, bot, do_unall, mentions)
     await ctx.respond("👍")
 
 
@@ -135,19 +136,24 @@ async def unall(ctx: discord.ApplicationContext,
 async def unall(ctx: discord.ApplicationContext,
                 mentions: discord.Option(str, "mention user(s) or role(s)") = ""):
 
-    await do_unall(ctx, mentions)
+    await handle_errors(ctx, bot, do_unall, mentions)
     await ctx.respond("👍")
 
 
 @bot.slash_command(name="react", description="do everything using reactions!")
 async def react(ctx: discord.ApplicationContext):
-    emojis = get_emojis(bot)
-    await add_reactions(ctx, emojis)
+    try:
+        emojis = get_emojis(bot)
+        await add_reactions(ctx, emojis)
 
-    @bot.event
-    async def on_reaction_add(reaction: discord.Reaction, user: discord.User):
-        await handle_reaction(reaction, user, bot, ctx)
+        @bot.event
+        async def on_reaction_add(reaction: discord.Reaction, user: discord.User):
+            await handle_reaction(reaction, user, bot, ctx)
 
+    except discord.Forbidden:  # the bot doesn't have the permission to do this
+        return await show_permission_error(ctx)
+    except Exception as e:
+        return await show_common_error(ctx, bot, e)
 
 # DEPRECATED #################################################
 
