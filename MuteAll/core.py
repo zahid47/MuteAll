@@ -4,7 +4,8 @@ from MuteAll.utils import can_do, get_affected_users
 
 async def do(task="mute", members=None):
     if members is None:
-        members = []
+        # members = []
+        return
 
     for member in members:
         match task:
