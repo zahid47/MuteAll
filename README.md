@@ -87,6 +87,23 @@ Go to the project directory
   cd MuteAll
 ```
 
+Create a virtual environment
+```bash
+  python -m venv venv
+```
+
+Activate the virtual environment
+
+windows: 
+```cmd
+  venv\Scripts\activate
+```
+
+mac/ linux: 
+```bash
+  source venv\Scripts\activate
+```
+
 Install dependencies
 
 ```bash
