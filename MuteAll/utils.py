@@ -29,7 +29,11 @@ async def handle_errors(ctx, bot, function, mentions):
         return await show_common_error(ctx, bot, e)
 
 
-def can_do(ctx, requiredPermissions=[]):
+def can_do(ctx, requiredPermissions=None):
+
+    if requiredPermissions is None:
+        requiredPermissions = []
+
     if not ctx.guild:
         return "This does not work in DMs"
 
