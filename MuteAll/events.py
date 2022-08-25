@@ -5,9 +5,9 @@ from MuteAll.errors import show_common_error
 
 
 async def handle_ready(bot):
-    activity = discord.Activity(
-        name="for slash commands", type=discord.ActivityType.watching)
-    await bot.change_presence(status=discord.Status.online, activity=activity)
+    # activity = discord.Activity(
+    #     name="for slash commands", type=discord.ActivityType.watching)
+    await bot.change_presence(status=discord.Status.online)
     print(f"Logged in as {bot.user}")
 
 
