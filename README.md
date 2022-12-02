@@ -115,8 +115,6 @@ Start the bot
 ```bash
   python -m MuteAll
 ```
-
-<!-- Roadmap -->
 <br>
 
 ## Todo
