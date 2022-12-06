@@ -13,7 +13,7 @@
 
 <br />
 
-[Invite The Bot](https://discord.com/api/oauth2/authorize?client_id=757369495953342593&permissions=2160421952&scope=bot%20applications.commands)
+[Invite The Bot](https://discord.com/api/oauth2/authorize?client_id=757369495953342593&permissions=2160421952&scope=bot%20applications.commands) or search for MuteAll in App Directory!
 
 [Join Support Server](https://discord.gg/8hrhffR6aX)
 
