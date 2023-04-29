@@ -38,6 +38,7 @@ async def do_mute(ctx, mentions):
         members = get_affected_users(ctx, mentions)
 
     await do(task="mute", members=members)
+    await ctx.respond("👍")
 
 
 async def do_unmute(ctx, mentions):
@@ -52,6 +53,7 @@ async def do_unmute(ctx, mentions):
         members = get_affected_users(ctx, mentions)
 
     await do(task="unmute", members=members)
+    await ctx.respond("👍")
 
 
 async def do_deafen(ctx, mentions):
@@ -65,6 +67,7 @@ async def do_deafen(ctx, mentions):
         members = get_affected_users(ctx, mentions)
 
     await do(task="deafen", members=members)
+    await ctx.respond("👍")
 
 
 async def do_undeafen(ctx, mentions):
@@ -79,6 +82,7 @@ async def do_undeafen(ctx, mentions):
         members = get_affected_users(ctx, mentions)
 
     await do(task="undeafen", members=members)
+    await ctx.respond("👍")
 
 
 async def do_all(ctx, mentions):
@@ -93,6 +97,7 @@ async def do_all(ctx, mentions):
         members = get_affected_users(ctx, mentions)
 
     await do(task="all", members=members)
+    await ctx.respond("👍")
 
 
 async def do_unall(ctx, mentions):
@@ -107,6 +112,7 @@ async def do_unall(ctx, mentions):
         members = get_affected_users(ctx, mentions)
 
     await do(task="unall", members=members)
+    await ctx.respond("👍")
 
 
 async def add_reactions(ctx, emojis):
