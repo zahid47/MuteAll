@@ -143,7 +143,7 @@ Start the bot
 
 ## Contact
 
-scarecow#2857 on discord
+@scarecow on discord
 
 <!-- Acknowledgments -->
 <br>
